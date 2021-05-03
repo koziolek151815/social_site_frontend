@@ -40,15 +40,10 @@ function LoginForm(props) {
                     redirectToHome();
                     props.showError(null)
                 }
-                else if(response.data.code === 204){
-                    props.showError("Username and password do not match");
-                }
-                else{
-                    props.showError("Username does not exists");
-                    console.log("Code is "+response.status);
-                }
+
             })
             .catch(function (error) {
+                props.showError("Invalid credentials");
                 console.log(error);
             });
     }
@@ -85,21 +80,21 @@ function LoginForm(props) {
                            onChange={handleChange}
                     />
                 </div>
-                <div className="form-check">
-                </div>
+
                 <button
                     type="submit"
                     className="btn btn-primary"
                     onClick={handleSubmitClick}
                 >Submit</button>
             </form>
-            <div className="alert alert-success mt-2" style={{display: state.successMessage ? 'block' : 'none' }} role="alert">
-                {state.successMessage}
-            </div>
             <div className="registerMessage">
                 <span>Dont have an account? </span>
                 <span className="loginText" onClick={() => redirectToRegister()}>Register</span>
             </div>
+            <div className="alert alert-success mt-2" style={{display: state.successMessage ? 'block' : 'none' }} role="alert">
+                {state.successMessage}
+            </div>
+
         </div>
     )
 }

@@ -1,32 +1,45 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-
+import './AddPost.css';
 
 function AddPost() {
-    const [text, setText] = useState('');
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
     const token = localStorage.getItem('token');
-    const handleChange = (event) => {
-        setText(event.target.value);
+    const handleTitleChange = (event) => {
+        setTitle(event.target.value);
+    };
+    const handleDescriptionChange = (event) => {
+        setDescription(event.target.value);
     };
     const sendPost = () => {
         axios.post('http://localhost:8081/posts', {
-            description: text
+            description: description,
+            title: title
+
         },{ headers: {"Authorization" : `Bearer ${token}`} })
             .then((response) => {
                 console.log(response);
             }, (error) => {
                 console.log(error);
             });
-        setText('');
+        setDescription('');
+        setTitle('');
 
     };
 
     return (
-        <div className="App">
-            <label>
-                Add Post:
-                <textarea value={text} placeholder={"Add something interesting"} onChange={handleChange} />
-            </label>
+        <div className="AddPost">
+            <div>
+                <p>Add title:</p>
+                <textarea id= {"title"} value={title} placeholder={"Add title"} onChange={handleTitleChange} />
+            </div>
+            <div>
+            <div>
+                <p>Add content:</p>
+                <textarea id= {"description"} value={description} placeholder={"Add something interesting"} onChange={handleDescriptionChange} />
+            </div>
+            </div>
             <input type="button" value="Add" onClick={sendPost} />
         </div>
     );

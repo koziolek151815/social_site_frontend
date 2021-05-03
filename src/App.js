@@ -11,6 +11,7 @@ import MainPage from "./Components/MainPage/MainPage";
 import AlertComponent from "./Components/AlertComponent/AlertComponent";
 import PrivateRoute from "./Components/PrivateRoute";
 import AddPost from "./Components/AddPost/AddPost";
+import PostPage from "./Components/PostPage/PostPage";
 
 function App() {
   const [title, updateTitle] = useState(null);
@@ -30,8 +31,9 @@ function App() {
               <Route path="/login">
                 <LoginForm showError={updateErrorMessage} updateTitle={updateTitle}/>
               </Route>
-              <PrivateRoute path="/home" component={MainPage} />
+              <PrivateRoute exact path="/home" component={MainPage} />
               <PrivateRoute path="/addPost" component={AddPost} />
+              <PrivateRoute path="/posts/:id" component={PostPage} />
             </Switch>
             <AlertComponent errorMessage={errorMessage} hideError={updateErrorMessage}/>
           </div>

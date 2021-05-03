@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 
 
 function RegistrationForm(props) {
+
     const [state , setState] = useState({
         email : "",
         username : "",
@@ -21,31 +22,43 @@ function RegistrationForm(props) {
         }))
     }
     const sendDetailsToServer = () => {
-        if(state.email.length && state.password.length) {
+        if(state.email.length && state.password.length && state.username.length) {
+
             props.showError(null);
             const payload={
                 "email":state.email,
-                "password":state.password
+                "password":state.password,
+                "username": state.username,
+                "gender": state.gender
             }
             axios.post('http://localhost:8081/users/register', payload)
                 .then(function (response) {
+                    console.log(response);
                     if(response.status === 200){
                         setState(prevState => ({
                             ...prevState,
-                            'successMessage' : 'Registration successful. Redirecting to home page..'
+                            'successMessage' : 'Registration successful. You can go to login page'
                         }))
-                        redirectToHome();
-                        props.showError(null)
-                    } else{
+                        //redirectToHome();
+                        props.showError(null);
+                    }
+
+                    else if (response.status === 500){
+                        console.log(response);
+                        props.showError("Registration failed");
+                    }
+                    else{
                         console.log(response);
                         props.showError("Some error ocurred");
                     }
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    console.log("Email taken");
+                    props.showError("Registration failed");
+
                 });
         } else {
-            props.showError('Please enter valid username and password')
+            props.showError('Please enter not null username, email and password')
         }
 
     }
@@ -59,10 +72,27 @@ function RegistrationForm(props) {
     }
     const handleSubmitClick = (e) => {
         e.preventDefault();
-        if(state.password === state.confirmPassword) {
-            sendDetailsToServer()
-        } else {
+        var error = false;
+        if(!(state.password === state.confirmPassword)) {
             props.showError('Passwords do not match');
+            error = true;
+        }
+
+        var mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+        if(!state.email.match(mailformat)){
+            props.showError('Email is not valid');
+            error = true;
+        }
+        if(!(state.password.length > 4)){
+            props.showError('Password is too short');
+            error = true;
+        }
+        if(!(state.username.length > 4)){
+            props.showError('Username is too short');
+            error = true;
+        }
+        if (!error){
+            sendDetailsToServer()
         }
     }
     return(
@@ -81,6 +111,16 @@ function RegistrationForm(props) {
                     <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
                 </div>
                 <div className="form-group text-left">
+                    <label htmlFor="exampleInputUsername1">Username</label>
+                    <input className="form-control"
+                           type="text"
+                           id="username"
+                           placeholder="Username"
+                           value={state.username}
+                           onChange={handleChange}
+                    />
+                </div>
+                <div className="form-group text-left">
                     <label htmlFor="exampleInputPassword1">Password</label>
                     <input type="password"
                            className="form-control"
@@ -97,6 +137,16 @@ function RegistrationForm(props) {
                            id="confirmPassword"
                            placeholder="Confirm Password"
                            value={state.confirmPassword}
+                           onChange={handleChange}
+                    />
+                </div>
+                <div className="form-group text-left">
+                    <label htmlFor="exampleInputSex1">Gender</label>
+                    <input className="form-control"
+                           type="text"
+                           id="gender"
+                           placeholder="Gender"
+                           value={state.gender}
                            onChange={handleChange}
                     />
                 </div>

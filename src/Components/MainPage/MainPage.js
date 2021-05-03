@@ -17,7 +17,7 @@ function MainPage() {
         <div className="App">
             <h2> Posts </h2>
             {posts.map(post =>
-                <Post post = {post}  />
+                <Post post = {post} key={post.postId}  />
             )}
         </div>
     );

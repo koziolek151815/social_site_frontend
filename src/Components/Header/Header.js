@@ -23,11 +23,12 @@ function Header(props) {
             </div>
         </nav>*/
     <Navbar bg="dark" variant="dark">
-        <Navbar.Brand href="#home">Navbar</Navbar.Brand>
+        <Navbar.Brand>Kris welcomes you!</Navbar.Brand>
         <Nav className="mr-auto">
             <Nav.Link href="http://localhost:3000/home">Home</Nav.Link>
-            <Nav.Link href="#" onClick={logout}>Logout</Nav.Link>
             <Nav.Link href="http://localhost:3000/addPost" >AddPost</Nav.Link>
+            <Nav.Link href="login" onClick={logout}>Logout</Nav.Link>
+
         </Nav>
         <Form inline>
             <FormControl type="text" placeholder="Search" className="mr-sm-2" />
