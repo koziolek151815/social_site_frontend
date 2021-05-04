@@ -3,9 +3,9 @@ import axios from "axios";
 import './AddPost.css';
 
 function AddPost() {
-    const fileInput = React.createRef();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+
     const token = localStorage.getItem('token');
 
     const handleTitleChange = (event) => {
@@ -21,55 +21,58 @@ function AddPost() {
         setSelectedFile(event.target.files[0]);
     };
 
-    const submitPhoto = () => {
+
+    const sendPostPhoto = () => {
         const formData = new FormData();
         formData.append("file", selectedFile);
 
-        axios.post('http://localhost:8081/uploadPostPhoto', formData, { headers: {"Authorization" : `Bearer ${token}`} })
+        axios.post('http://localhost:8081/uploadPostPhoto', formData,
+            { headers: {"Authorization" : `Bearer ${token}`} })
             .then((res) => {
-                alert("File Upload success");
+                window.location.replace("/home");
             })
-
             .catch((err) => alert("File Upload Error"));
     };
 
-    const sendPost = () => {
+    const sendPostData = () => {
         axios.post('http://localhost:8081/posts', {
             description: description,
             title: title
-
         },{ headers: {"Authorization" : `Bearer ${token}`} })
             .then((response) => {
                 console.log(response);
+                setDescription('');
+                setTitle('');
             }, (error) => {
                 console.log(error);
             });
-        setDescription('');
-        setTitle('');
+    };
 
+    const addPost = (event) => {
+        event.preventDefault();
+        sendPostData();
+        sendPostPhoto();
     };
 
 
     return (
         <div className="AddPost">
-            <div>
-                <p>Add title:</p>
-                <textarea id= {"title"} value={title} placeholder={"Add title"} onChange={handleTitleChange} />
-            </div>
-            <div>
-            <div>
-                <p>Add content:</p>
-                <textarea id= {"description"} value={description} placeholder={"Add something interesting"} onChange={handleDescriptionChange} />
-            </div>
-            </div>
-            <input type="button" value="Add" onClick={sendPost} />
 
-            <div>
-                <input type="file" name="file" onChange={changeHandler} />
+            <form>
                 <div>
-                    <button onClick={submitPhoto}>Submit</button>
+                    <p>Add title:</p>
+                    <textarea id= {"title"} value={title} placeholder={"Add title"} onChange={handleTitleChange} />
                 </div>
-            </div>
+                <div>
+                    <p>Add content:</p>
+                    <textarea id= {"description"} value={description} placeholder={"Add something interesting"} onChange={handleDescriptionChange} />
+                </div>
+                <div>
+                    <input id="fileInput"  type="file" name="file" onChange={changeHandler} />
+                    <button id="addPostButton" onClick={addPost}>Submit</button>
+                </div>
+            </form>
+
 
         </div>
     );
