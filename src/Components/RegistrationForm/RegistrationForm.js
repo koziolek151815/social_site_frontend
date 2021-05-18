@@ -34,7 +34,7 @@ function RegistrationForm(props) {
             axios.post('http://localhost:8081/users/register', payload)
                 .then(function (response) {
                     console.log(response);
-                    if(response.status === 200){
+                    if(response.status === 201){
                         setState(prevState => ({
                             ...prevState,
                             'successMessage' : 'Registration successful. You can go to login page'
