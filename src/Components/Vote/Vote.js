@@ -43,7 +43,8 @@ function Vote(props) {
 
     }
 
-    useEffect(syncVote, []);
+    //useEffect(syncVote, []);
+    syncVote();
 
     const sendVote = (vote) => {
         const data = {"vote": vote}

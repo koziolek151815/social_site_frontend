@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import './PostPage.css';
 import Comment from "../Comment/Comment";
 import AddComment from "../AddComment/AddComment";
+import Vote from "../Vote/Vote";
 
 function PostPage(props) {
     const [post, setPost] = useState([]);
@@ -45,6 +46,7 @@ function PostPage(props) {
                 <br/>
                 <p> Author: {username}</p>
                 <br/>
+                <Vote postRating={post.rating} postId={post.postId} />
             </div>
             {comments.map(comment =>
                 <Comment comment = {comment} key={comment.id} />

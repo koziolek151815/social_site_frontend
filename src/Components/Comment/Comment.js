@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import axios, * as others from 'axios';
 import {Link} from "react-router-dom";
 import './Comment.css';
+import Vote from "../Vote/Vote";
 
 function Comment(props) {
     function formatDate(dateParam){
@@ -24,6 +25,7 @@ function Comment(props) {
             <br/>
             <p> Author: {props.comment.postAuthor.username}</p>
             <br/>
+            <Vote postRating={props.comment.rating} postId={props.comment.postId} />
         </div>
     );
 }
