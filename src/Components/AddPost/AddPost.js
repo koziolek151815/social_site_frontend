@@ -21,9 +21,13 @@ function AddPost() {
 
     const sendPostCreationRequest = () => {
         const formData = new FormData();
-        formData.append("postPhoto", selectedFile);
         formData.append("title", title);
         formData.append("description", description);
+        //formData.append("postPhoto", selectedFile);
+
+        if(selectedFile != null) {
+            formData.append("postPhoto", selectedFile);
+        }
 
         axios.post('http://localhost:8081/posts', formData,
             { headers: {"Authorization" : `Bearer ${token}`} })
