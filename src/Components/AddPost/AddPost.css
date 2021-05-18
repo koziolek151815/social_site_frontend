@@ -24,3 +24,8 @@
 #fileInput{
     padding: 10px;
 }
+
+#photoPreview{
+    max-width: 100%;
+    max-width: 400px;
+}

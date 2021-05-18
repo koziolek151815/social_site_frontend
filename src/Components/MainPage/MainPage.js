@@ -7,10 +7,10 @@ function MainPage() {
     const token = localStorage.getItem('token');
     useEffect(async () => {
         const response = await axios.get(
-            'http://localhost:8081/posts/getAll', { headers: {"Authorization" : `Bearer ${token}`} }
+            'http://localhost:8081/posts/getFrontPage', { headers: {"Authorization" : `Bearer ${token}`} }
         );
         console.log(response.data);
-        setPosts(response.data);
+        setPosts(response.data.content);
     }, []);
 
     return (
