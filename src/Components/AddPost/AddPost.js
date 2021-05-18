@@ -5,6 +5,9 @@ import './AddPost.css';
 function AddPost() {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    const [selectedFile, setSelectedFile] = useState();
+    const fileInput = React.createRef();
+    const photoPreview = React.createRef();
 
     const token = localStorage.getItem('token');
 
@@ -15,50 +18,48 @@ function AddPost() {
         setDescription(event.target.value);
     };
 
-    const [selectedFile, setSelectedFile] = useState();
 
-    const changeHandler = (event) => {
-        setSelectedFile(event.target.files[0]);
-    };
-
-
-    const sendPostPhoto = () => {
+    const sendPostCreationRequest = () => {
         const formData = new FormData();
-        formData.append("file", selectedFile);
+        formData.append("postPhoto", selectedFile);
+        formData.append("title", title);
+        formData.append("description", description);
 
-        axios.post('http://localhost:8081/uploadPostPhoto', formData,
+        axios.post('http://localhost:8081/posts', formData,
             { headers: {"Authorization" : `Bearer ${token}`} })
-            .then((res) => {
-                window.location.replace("/home");
-            })
-            .catch((err) => alert("File Upload Error"));
-    };
-
-    const sendPostData = () => {
-        axios.post('http://localhost:8081/posts', {
-            description: description,
-            title: title
-        },{ headers: {"Authorization" : `Bearer ${token}`} })
             .then((response) => {
+                window.location.replace("/home");
                 console.log(response);
-                setDescription('');
-                setTitle('');
-            }, (error) => {
+            })
+            .catch((error) => {
                 console.log(error);
+                alert("File Upload Error");
             });
     };
 
+
     const addPost = (event) => {
         event.preventDefault();
-        sendPostData();
-        sendPostPhoto();
+        sendPostCreationRequest();
     };
 
+
+    const changeHandler = (event) => {
+        setSelectedFile(event.target.files[0]);
+
+        const [file] = fileInput.current.files
+        if (file) {
+            photoPreview.current.src = URL.createObjectURL(file)
+        }
+    };
 
     return (
         <div className="AddPost">
 
             <form>
+                <div>
+                    <img ref={photoPreview} id="photoPreview" src="#" alt="" />
+                </div>
                 <div>
                     <p>Add title:</p>
                     <textarea id= {"title"} value={title} placeholder={"Add title"} onChange={handleTitleChange} />
@@ -68,7 +69,7 @@ function AddPost() {
                     <textarea id= {"description"} value={description} placeholder={"Add something interesting"} onChange={handleDescriptionChange} />
                 </div>
                 <div>
-                    <input id="fileInput"  type="file" name="file" onChange={changeHandler} />
+                    <input ref={fileInput} id="fileInput" accept="image/*"  type="file" name="file" onChange={changeHandler} />
                     <button id="addPostButton" onClick={addPost}>Submit</button>
                 </div>
             </form>

@@ -9,7 +9,6 @@ function MainPage() {
         const response = await axios.get(
             'http://localhost:8081/posts/getFrontPage', { headers: {"Authorization" : `Bearer ${token}`} }
         );
-        console.log(response.data.content);
         setPosts(response.data.content);
     }, []);
 
