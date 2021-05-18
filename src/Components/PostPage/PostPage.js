@@ -4,6 +4,7 @@ import axios, * as others from 'axios';
 import {Link} from "react-router-dom";
 import './PostPage.css';
 import Comment from "../Comment/Comment";
+import AddComment from "../AddComment/AddComment";
 
 function PostPage(props) {
     const [post, setPost] = useState([]);
@@ -15,7 +16,7 @@ function PostPage(props) {
             'http://localhost:8081/posts/getById?postId=' +props.match.params.id, { headers: {"Authorization" : `Bearer ${token}`} }
         );
         const responseComments = await axios(
-            'http://localhost:8081/posts/getPostReplies?postId=' +props.match.params.id, { headers: {"Authorization" : `Bearer ${token}`} }
+            'http://localhost:8081/posts/getPostReplies?postId=' +props.match.params.id + "&sort=postCreatedDate,ASC", { headers: {"Authorization" : `Bearer ${token}`} }
         );
         setComments(responseComments.data.content);
         console.log(response.data.postAuthor);
@@ -48,6 +49,7 @@ function PostPage(props) {
             {comments.map(comment =>
                 <Comment comment = {comment} key={comment.id} />
             )}
+            <AddComment parentPostId = {props.match.params.id} />
         </div>
     );
 }
