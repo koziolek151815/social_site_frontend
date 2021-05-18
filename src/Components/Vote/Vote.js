@@ -2,6 +2,8 @@ import React, {useEffect, useState} from "react";
 import axios, * as others from 'axios';
 import {Link} from "react-router-dom";
 import './Vote.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.min.js';
 
 function Vote(props) {
     const token = localStorage.getItem('token');
@@ -15,15 +17,15 @@ function Vote(props) {
 
             switch (response.data) {
                 case 0:
-                    downvoteButton.className = upvoteButton.className = "";
+                    downvoteButton.className = upvoteButton.className = "btn btn-default bg-info";
                     break;
                 case 1:
-                    downvoteButton.className = "";
-                    upvoteButton.className = "upvoteClicked";
+                    downvoteButton.className = "btn btn-default bg-info";
+                    upvoteButton.className = "btn btn-default bg-success";
                     break;
                 case -1:
-                    downvoteButton.className = "downvoteClicked";
-                    upvoteButton.className = "";
+                    downvoteButton.className = "btn btn-default bg-danger";
+                    upvoteButton.className = "btn btn-default bg-info";
                     break;
             }
         });
@@ -75,11 +77,11 @@ function Vote(props) {
 
 
     return (
-        <div className="Voting">
-            <button id={"upvoteButton" + props.postId} onClick={upvoteClicked}>Upvote</button>
-            <div id={"rating" + props.postId}>{props.postRating}</div>
-            <button id={"downvoteButton" + props.postId} onClick={downvoteClicked}>Downvote</button>
-        </div>
+        <span className="Voting">
+            <span className="mx-3" id={"rating" + props.postId}>{props.postRating}</span>
+            <button type="button" id={"upvoteButton" + props.postId} onClick={upvoteClicked}>Upvote</button>
+            <button type="button" id={"downvoteButton" + props.postId} onClick={downvoteClicked}>Downvote</button>
+        </span>
     );
 }
 

@@ -1,5 +1,5 @@
 .Post{
-    border-style: groove;
-    margin-bottom: 30px;
-    padding: 2px;
+    background-color: mintcream;
 }
+
+.blogShort{ border-bottom:1px solid #ddd;}

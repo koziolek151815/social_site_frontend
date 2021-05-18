@@ -20,7 +20,7 @@ function App() {
       <Router>
         <div className="App">
           <Header title={title}/>
-          <div className="container d-flex align-items-center flex-column">
+          <div className="container d-flex flex-column">
             <Switch>
               <Route path="/" exact={true}>
                 <RegistrationForm showError={updateErrorMessage} updateTitle={updateTitle}/>
