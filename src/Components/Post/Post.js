@@ -6,16 +6,21 @@ import Vote from "../Vote/Vote";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 
+import {formatDate} from "../../Utility/Date";
+
 function Post(props) {
-    function formatDate(dateParam) {
-        const date = new Date(dateParam);
-        const day = ("0" + date.getDate()).slice(-2);
-        const month = ("0" + date.getMonth()).slice(-2);
-        const year = date.getFullYear();
-        const hours = ("0" + date.getHours()).slice(-2);
-        const minutes = ("0" + date.getMinutes()).slice(-2);
-        return day + '.' + month + '.' + year + ' ' + hours + ':' + minutes;
-    }
+
+    const token = localStorage.getItem('token');
+    useEffect(async () => {
+
+        if(props.post.postPhotoName!=null) {
+            const response = await axios.get(
+                'http://localhost:8081/posts/getPhoto?postId=' + props.post.postId, {headers: {"Authorization": `Bearer ${token}`}}
+            );
+            document.getElementById("image" + props.post.postId).src = "data:image/jpeg;base64," + response.data;
+        }
+
+    }, []);
 
     return (
         <div className="Post container my-2 border rounded">
@@ -23,7 +28,7 @@ function Post(props) {
                 <h1>{props.post.title}</h1>
                 <span className="float-left"> Author: {props.post.postAuthor.username}</span>
                 <span className="float-right">{formatDate(props.post.postCreatedDate)}</span>
-                <img alt="post img" src="https://upload.wikimedia.org/wikipedia/commons/d/dd/Big_%26_Small_Pumkins.JPG" className="align-content-center img-fluid thumb margin10 img-thumbnail"/>
+                <img id={"image" + props.post.postId} alt="post img" src="" className="align-content-center img-fluid thumb margin10 img-thumbnail"/>
                 <article><p>
                     Content: {props.post.description}
                 </p></article>

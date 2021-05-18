@@ -5,7 +5,7 @@ import './AddPost.css';
 function AddPost() {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [selectedFile, setSelectedFile] = useState();
+    const [selectedFile, setSelectedFile] = useState(null);
     const fileInput = React.createRef();
     const photoPreview = React.createRef();
 
@@ -23,7 +23,6 @@ function AddPost() {
         const formData = new FormData();
         formData.append("title", title);
         formData.append("description", description);
-        //formData.append("postPhoto", selectedFile);
 
         if(selectedFile != null) {
             formData.append("postPhoto", selectedFile);
@@ -48,7 +47,7 @@ function AddPost() {
     };
 
 
-    const changeHandler = (event) => {
+    const fileInputChangeHandler = (event) => {
         setSelectedFile(event.target.files[0]);
 
         const [file] = fileInput.current.files
@@ -73,7 +72,7 @@ function AddPost() {
                     <textarea id= {"description"} value={description} placeholder={"Add something interesting"} onChange={handleDescriptionChange} />
                 </div>
                 <div>
-                    <input ref={fileInput} id="fileInput" accept="image/*"  type="file" name="file" onChange={changeHandler} />
+                    <input ref={fileInput} id="fileInput" accept="image/*"  type="file" name="file" onChange={fileInputChangeHandler} />
                     <button id="addPostButton" onClick={addPost}>Submit</button>
                 </div>
             </form>
