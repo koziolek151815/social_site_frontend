@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import axios, * as others from 'axios';
 import {Link} from "react-router-dom";
 import './Post.css';
+import Vote from "../Vote/Vote";
 
 function Post(props) {
     function formatDate(dateParam){
@@ -27,6 +28,7 @@ function Post(props) {
                 <br/>
                 <p> Author: {props.post.postAuthor.username}</p>
                 <br/>
+                <Vote postRating={props.post.rating} postId={props.post.postId} />
         </div>
     );
 }
