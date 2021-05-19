@@ -1,11 +1,11 @@
 
 import React, {useEffect, useState} from "react";
 import axios, * as others from 'axios';
-import {Link} from "react-router-dom";
 import './PostPage.css';
 import Comment from "../Comment/Comment";
 import AddComment from "../AddComment/AddComment";
 import Vote from "../Vote/Vote";
+import { withRouter } from "react-router";
 
 import {formatDate} from "../../Utility/Date";
 
@@ -43,9 +43,9 @@ function PostPage(props) {
             {comments.map(comment =>
                 <Comment comment = {comment} key={comment.id} />
             )}
-            <AddComment parentPostId = {props.match.params.id} />
+            <AddComment parentPostId = {props.match.params.id} showError={props.showError} />
         </div>
     );
 }
 
-export default PostPage;
+export default withRouter(PostPage);

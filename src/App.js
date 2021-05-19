@@ -31,9 +31,13 @@ function App() {
               <Route path="/login">
                 <LoginForm showError={updateErrorMessage} updateTitle={updateTitle}/>
               </Route>
+              <PrivateRoute path="/addPost">
+                <AddPost showError={updateErrorMessage}  />
+              </PrivateRoute>
+              <PrivateRoute path="/posts/:id">
+                <PostPage showError={updateErrorMessage}  />
+              </PrivateRoute>
               <PrivateRoute exact path="/home" component={MainPage} />
-              <PrivateRoute path="/addPost" component={AddPost} />
-              <PrivateRoute path="/posts/:id" component={PostPage} />
             </Switch>
             <AlertComponent errorMessage={errorMessage} hideError={updateErrorMessage}/>
           </div>

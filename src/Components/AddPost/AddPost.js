@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import './AddPost.css';
 
-function AddPost() {
+function AddPost(props) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [selectedFile, setSelectedFile] = useState(null);
@@ -43,7 +43,20 @@ function AddPost() {
 
     const addPost = (event) => {
         event.preventDefault();
-        sendPostCreationRequest();
+
+        var error = false;
+
+        if(title.length < 5  ){
+            props.showError('Title is too short!');
+            error = true;
+        }
+        else if(description.length < 5 ){
+            props.showError('Description is too short!');
+            error = true;
+        }
+        if (!error){
+            sendPostCreationRequest();
+        }
     };
 
 

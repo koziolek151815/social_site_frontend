@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 
+
 function AddComment(props) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -20,14 +21,16 @@ function AddComment(props) {
 
     const sendPostCreationRequest = () => {
         const formData = new FormData();
-        formData.append("postPhoto", selectedFile);
-        formData.append("title", title);
         formData.append("description", description);
+        formData.append("title", title);
+        if(selectedFile != null) {
+            formData.append("postPhoto", selectedFile);
+        }
 
         axios.post('http://localhost:8081/posts?parentPostId=' + props.parentPostId, formData,
             { headers: {"Authorization" : `Bearer ${token}`} })
             .then((response) => {
-                window.location.replace("/home");
+                window.location.reload();
                 console.log(response);
             })
             .catch((error) => {
@@ -40,7 +43,20 @@ function AddComment(props) {
 
     const addPost = (event) => {
         event.preventDefault();
-        sendPostCreationRequest();
+
+        var error = false;
+
+        if(title.length < 5  ){
+            props.showError('Title is too short!');
+            error = true;
+        }
+        else if(description.length < 5 ){
+            props.showError('Description is too short!');
+            error = true;
+        }
+        if (!error){
+            sendPostCreationRequest();
+        }
     };
 
 
