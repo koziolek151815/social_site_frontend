@@ -3,15 +3,14 @@ import React, {useEffect, useState} from "react";
 import axios, * as others from 'axios';
 import './PostPage.css';
 import Comment from "../Comment/Comment";
-import AddComment from "../AddComment/AddComment";
-import Vote from "../Vote/Vote";
+import AddPost from "../AddPost/AddPost";
 import { withRouter } from "react-router";
 
-import {formatDate} from "../../Utility/Date";
+import Post from "../Post/Post";
+
 
 function PostPage(props) {
-    const [post, setPost] = useState([]);
-    const [username, setUsername] = useState('');
+    const [post, setPost] = useState(null);
     const [comments, setComments] = useState([]);
     const token = localStorage.getItem('token');
     useEffect(async () => {
@@ -21,29 +20,17 @@ function PostPage(props) {
         const responseComments = await axios(
             'http://localhost:8081/posts/getPostReplies?postId=' +props.match.params.id + "&sort=postCreatedDate,ASC", { headers: {"Authorization" : `Bearer ${token}`} }
         );
-        setComments(responseComments.data.content);
-        console.log(response.data.postAuthor);
         setPost(response.data);
-        setUsername(response.data.postAuthor.username);
+        setComments(responseComments.data.content);
     }, []);
 
     return (
         <div className="PostPage">
-            <div>
-                <p> Title: {post.title}</p>
-                <br/>
-                <p> Content: {post.description}</p>
-                <br/>
-                <p> Time: {formatDate(post.postCreatedDate)}</p>
-                <br/>
-                <p> Author: {username}</p>
-                <br/>
-                <Vote postRating={post.rating} postId={post.postId} />
-            </div>
+            {post!=null?<Post post={post}/>:("Loading...")}
             {comments.map(comment =>
                 <Comment comment = {comment} key={comment.id} />
             )}
-            <AddComment parentPostId = {props.match.params.id} showError={props.showError} />
+            <AddPost parentPostId = {props.match.params.id} showError={props.showError} />
         </div>
     );
 }

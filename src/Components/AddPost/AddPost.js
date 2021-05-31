@@ -2,34 +2,63 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import './AddPost.css';
 
-function AddPost(props) {
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [selectedFile, setSelectedFile] = useState(null);
-    const fileInput = React.createRef();
-    const photoPreview = React.createRef();
+import { WithContext as ReactTags } from 'react-tag-input';
 
-    const token = localStorage.getItem('token');
+const KeyCodes = {
+    comma: 188,
+    enter: 13,
+};
 
-    const handleTitleChange = (event) => {
-        setTitle(event.target.value);
+const delimiters = [KeyCodes.comma, KeyCodes.enter];
+
+class AddPost extends React.Component {
+    state = {
+        title: '',
+        tags: [],
+        suggestions: [],
+        description: '',
+        selectedFile: null,
     };
-    const handleDescriptionChange = (event) => {
-        setDescription(event.target.value);
+
+    constructor(props) {
+        super(props);
+
+        this.fileInput = React.createRef();
+        this.photoPreview = React.createRef();
+        this.token = localStorage.getItem('token');
+
+
+    }
+
+    handleTitleChange = (event) => {
+        this.setState(state => ({title: event.target.value}))
+    };
+    handleTagsChange = (event) => {
+        this.setState(state => ({tags: event.target.value}))
+    };
+    handleDescriptionChange = (event) => {
+        this.setState(state => ({description: event.target.value}))
     };
 
-
-    const sendPostCreationRequest = () => {
+    sendPostCreationRequest = () => {
         const formData = new FormData();
-        formData.append("title", title);
-        formData.append("description", description);
+        formData.append("title", this.state.title);
+        formData.append("description", this.state.description);
+        formData.append("tags", this.state.tags.map(t => t.text));
 
-        if(selectedFile != null) {
-            formData.append("postPhoto", selectedFile);
+        if(this.state.selectedFile != null) {
+            formData.append("postPhoto", this.state.selectedFile);
         }
+        let link;
+        if(this.isComment())
+            link = 'http://localhost:8081/posts?parentPostId=' + this.props.parentPostId;
+        else
+            link = 'http://localhost:8081/posts';
 
-        axios.post('http://localhost:8081/posts', formData,
-            { headers: {"Authorization" : `Bearer ${token}`} })
+
+
+        axios.post(link, formData,
+            { headers: {"Authorization" : `Bearer ${this.token}`} })
             .then((response) => {
                 window.location.replace("/home");
                 console.log(response);
@@ -41,58 +70,99 @@ function AddPost(props) {
     };
 
 
-    const addPost = (event) => {
+    addPost = (event) => {
         event.preventDefault();
 
         var error = false;
 
-        if(title.length < 5  ){
-            props.showError('Title is too short!');
+        if(this.state.title.length < 5  ){
+            this.props.showError('Title is too short!');
             error = true;
         }
-        else if(description.length < 5 ){
-            props.showError('Description is too short!');
+        else if(this.state.description.length < 5 ){
+            this.props.showError('Description is too short!');
             error = true;
         }
         if (!error){
-            sendPostCreationRequest();
+            this.sendPostCreationRequest();
         }
     };
 
 
-    const fileInputChangeHandler = (event) => {
-        setSelectedFile(event.target.files[0]);
+    fileInputChangeHandler = (event) => {
+        this.setState(state => ({selectedFile: event.target.files[0]}))
 
-        const [file] = fileInput.current.files
+        const [file] = this.fileInput.current.files
         if (file) {
-            photoPreview.current.src = URL.createObjectURL(file)
+            this.photoPreview.current.src = URL.createObjectURL(file)
         }
     };
 
-    return (
-        <div className="AddPost">
+    handleDelete(i) {
+        this.setState({
+            tags: this.state.tags.filter((tag, index) => index !== i),
+        });
+    }
 
-            <form>
-                <div>
-                    <img ref={photoPreview} id="photoPreview" src="#" alt="" />
-                </div>
-                <div>
-                    <p>Add title:</p>
-                    <textarea id= {"title"} value={title} placeholder={"Add title"} onChange={handleTitleChange} />
-                </div>
-                <div>
-                    <p>Add content:</p>
-                    <textarea id= {"description"} value={description} placeholder={"Add something interesting"} onChange={handleDescriptionChange} />
-                </div>
-                <div>
-                    <input ref={fileInput} id="fileInput" accept="image/*"  type="file" name="file" onChange={fileInputChangeHandler} />
-                    <button id="addPostButton" onClick={addPost}>Submit</button>
-                </div>
-            </form>
+    handleAddition(tag) {
+        this.setState(state => ({ tags: [...state.tags, tag] }));
+        console.log(this.state.tags);
+    }
+
+    handleDrag(tag, currPos, newPos) {
+        const tags = [...this.state.tags];
+        const newTags = tags.slice();
+
+        newTags.splice(currPos, 1);
+        newTags.splice(newPos, 0, tag);
+
+        // re-render
+        this.setState({ tags: newTags });
+    }
+
+    isComment()
+    {
+        return typeof this.props.parentPostId !== 'undefined';
+    }
+
+    render() {
+        return (
+            <div className="AddPost">
+
+                <form>
+                    <div>
+                        <img ref={this.photoPreview} id="photoPreview" src="#" alt=""/>
+                    </div>
+                    <div>
+                        <p>Add title:</p>
+                        <textarea id={"title"} value={this.title} placeholder={"Add title"} onChange={this.handleTitleChange}/>
+                    </div>
+                    <div>
+                        <p>Add tags:</p>
+                        <ReactTags tags={this.state.tags}
+                                   suggestions={this.state.suggestions}
+                                   placeholder={"Add some tags"}
+                                   handleDelete={this.handleDelete.bind(this)}
+                                   handleAddition={this.handleAddition.bind(this)}
+                                   handleDrag={this.handleDrag.bind(this)}
+                                   delimiters={delimiters} />
+                    </div>
+                    <div>
+                        <p>Add content:</p>
+                        <textarea id={"description"} value={this.description} placeholder={"Add something interesting"}
+                                  onChange={this.handleDescriptionChange}/>
+                    </div>
+                    <div>
+                        <input ref={this.fileInput} id="fileInput" accept="image/*" type="file" name="file"
+                               onChange={this.fileInputChangeHandler}/>
+                        <button id="addPostButton" onClick={this.addPost}>Submit</button>
+                    </div>
+                </form>
 
 
-        </div>
-    );
+            </div>
+        );
+    }
 }
 
 export default AddPost;

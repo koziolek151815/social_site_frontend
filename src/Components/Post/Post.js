@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from "react";
 import axios, * as others from 'axios';
-import {Link} from "react-router-dom";
 import './Post.css';
 import Vote from "../Vote/Vote";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 
 import {formatDate} from "../../Utility/Date";
-import {Image} from "react-bootstrap";
 
 function Post(props) {
 
@@ -39,6 +37,11 @@ function Post(props) {
                 <h1>{props.post.title}</h1>
                 <span className="float-left"> Author: {props.post.postAuthor.username}</span>
                 <span className="float-right">{formatDate(props.post.postCreatedDate)}</span><br/>
+                {
+                    props.post.tags.length != 0 ?
+                    (<div id={"tags"}>{"Tags:"} {props.post.tags.join(", ")}</div>) :
+                    (<div id={"tags"}>{"No tags!"}</div>)
+                }
                 <div id = {"imageHolder" + props.post.postId}></div>
                 <article><p>
                     {props.post.description}
