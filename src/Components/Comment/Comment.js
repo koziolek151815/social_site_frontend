@@ -17,7 +17,7 @@ function Comment(props) {
 
         if(props.comment.postPhotoName!=null) {
             const response = await axios.get(
-                'http://localhost:8081/posts/getPhoto?postId=' + props.comment.postId, {headers: {"Authorization": `Bearer ${token}`}}
+                process.env.REACT_APP_BACKEND_URL + '/posts/getPhoto?postId=' + props.comment.postId, {headers: {"Authorization": `Bearer ${token}`}}
             );
 
             imageHolder.innerHTML = `<img id=\"image${props.comment.postId}\" alt=\"post img\" src=\"data:image/jpeg;base64,${response.data}\" className=\"align-content-center img-fluid thumb margin10 img-thumbnail\"/>`
@@ -34,16 +34,14 @@ function Comment(props) {
     return (
             <div className="Post container my-2 border rounded">
                 <div className="col-md-12 py-2 blogShort">
+                    <h1>{props.comment.title}</h1>
+                    <span className="float-left"> Author: {props.comment.postAuthor.username}</span>
+                    <span className="float-right">{formatDate(props.comment.postCreatedDate)}</span><br/>
+
                     <div id = {"imageHolder" + props.comment.postId}></div>
-                    <br/>
-                    <p> Title: {props.comment.title}</p>
-                    <br/>
-                    <p> Content: {props.comment.description}</p>
-                    <br/>
-                    <p> Time: {formatDate(props.comment.postCreatedDate)}</p>
-                    <br/>
-                    <p> Author: {props.comment.postAuthor.username}</p>
-                    <br/>
+                    <article><p>
+                        {props.comment.description}
+                    </p></article>
                     <Vote postRating={props.comment.rating} postId={props.comment.postId} />
                 </div>
             </div>
