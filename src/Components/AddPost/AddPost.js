@@ -60,7 +60,10 @@ class AddPost extends React.Component {
         axios.post(link, formData,
             { headers: {"Authorization" : `Bearer ${this.token}`} })
             .then((response) => {
-                window.location.replace("/home");
+                if(this.isComment())
+                    window.location.replace('/posts/' + this.props.parentPostId);
+                else
+                    window.location.replace('/posts/' + response.data.postId);
                 console.log(response);
             })
             .catch((error) => {

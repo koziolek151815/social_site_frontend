@@ -19,7 +19,7 @@ class ScrollablePostView extends React.Component {
 
     getDataFromApi = async (page)=>{
         return await axios.get(
-            `http://localhost:8081/posts/${this.props.endpoint}?page=${page}&size=5&sort=${this.props.sort}`,
+            `http://localhost:8081/${this.props.endpoint}?page=${page}&size=5&sort=${this.props.sort}`,
             { headers: {"Authorization" : `Bearer ${localStorage.getItem('token')}`} }
         );
     }

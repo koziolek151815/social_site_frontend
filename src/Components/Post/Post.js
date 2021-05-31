@@ -39,7 +39,7 @@ function Post(props) {
                 <span className="float-right">{formatDate(props.post.postCreatedDate)}</span><br/>
                 {
                     props.post.tags.length != 0 ?
-                    (<div id={"tags"}>{"Tags:"} {props.post.tags.join(", ")}</div>) :
+                    (<div id={"tags"}>{"Tags:"} {props.post.tags.map(tag => <a href={'/tags/' + tag  }>{tag + " "}</a> )}</div>) :
                     (<div id={"tags"}>{"No tags!"}</div>)
                 }
                 <div id = {"imageHolder" + props.post.postId}></div>
