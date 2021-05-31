@@ -31,7 +31,7 @@ function RegistrationForm(props) {
                 "username": state.username,
                 "gender": state.gender
             }
-            axios.post('http://localhost:8081/users/register', payload)
+            axios.post(process.env.REACT_APP_BACKEND_URL + '/users/register', payload)
                 .then(function (response) {
                     console.log(response);
                     if(response.status === 201){

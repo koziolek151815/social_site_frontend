@@ -25,7 +25,7 @@ function LoginForm(props) {
             "email":state.email,
             "password":state.password,
         }
-        axios.post('http://localhost:8081/users/authenticate', payload)
+        axios.post(process.env.REACT_APP_BACKEND_URL + '/users/authenticate', payload)
             .then(function (response) {
                 if(response.status === 200){
                     setState(prevState => ({

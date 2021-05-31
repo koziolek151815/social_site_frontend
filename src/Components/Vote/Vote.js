@@ -10,7 +10,7 @@ function Vote(props) {
 
     const syncVote = async () => {
         const voteResponse = axios.get(
-            'http://localhost:8081/posts/getCurrentUserVote?postId=' +props.postId, { headers: {"Authorization" : `Bearer ${token}`} }
+            process.env.REACT_APP_BACKEND_URL + '/posts/getCurrentUserVote?postId=' +props.postId, { headers: {"Authorization" : `Bearer ${token}`} }
         ).then((response) => {
             const upvoteButton = document.getElementById("upvoteButton" + props.postId);
             const downvoteButton = document.getElementById("downvoteButton" + props.postId);
@@ -33,7 +33,7 @@ function Vote(props) {
 
     const syncRating = ()=> {
         axios.get(
-            'http://localhost:8081/posts/getById?postId=' +props.postId, { headers: {"Authorization" : `Bearer ${token}`} }
+            process.env.REACT_APP_BACKEND_URL + '/posts/getById?postId=' +props.postId, { headers: {"Authorization" : `Bearer ${token}`} }
         ).then((response) => {
             console.log(response);
             document.getElementById("rating" + props.postId).innerText = response.data.rating;
@@ -51,7 +51,7 @@ function Vote(props) {
     const sendVote = (vote) => {
         const data = {"vote": vote}
 
-        axios.post('http://localhost:8081/posts/vote?postId=' +props.postId, data,
+        axios.post(process.env.REACT_APP_BACKEND_URL + '/posts/vote?postId=' +props.postId, data,
             { headers: {"Authorization" : `Bearer ${token}`} })
             .then((response) => {
                 console.log(response);
@@ -79,8 +79,8 @@ function Vote(props) {
     return (
         <span className="Voting">
             <span className="mx-3" id={"rating" + props.postId}>{props.postRating}</span>
-            <button type="button" id={"upvoteButton" + props.postId} onClick={upvoteClicked}>Upvote</button>
-            <button type="button" id={"downvoteButton" + props.postId} onClick={downvoteClicked}>Downvote</button>
+            <button type="button" id={"upvoteButton" + props.postId} onClick={upvoteClicked}>➕</button>
+            <button type="button" id={"downvoteButton" + props.postId} onClick={downvoteClicked}>➖</button>
         </span>
     );
 }

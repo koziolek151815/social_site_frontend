@@ -27,7 +27,9 @@ class AddPost extends React.Component {
         this.photoPreview = React.createRef();
         this.token = localStorage.getItem('token');
 
-
+        this.maxTags = 10;
+        this.minTitleLength = 4;
+        this.minDescriptionLength = 5;
     }
 
     handleTitleChange = (event) => {
@@ -51,9 +53,9 @@ class AddPost extends React.Component {
         }
         let link;
         if(this.isComment())
-            link = 'http://localhost:8081/posts?parentPostId=' + this.props.parentPostId;
+            link = process.env.REACT_APP_BACKEND_URL + '/posts?parentPostId=' + this.props.parentPostId;
         else
-            link = 'http://localhost:8081/posts';
+            link = process.env.REACT_APP_BACKEND_URL + '/posts';
 
 
 
@@ -78,11 +80,11 @@ class AddPost extends React.Component {
 
         var error = false;
 
-        if(this.state.title.length < 5  ){
+        if(this.state.title.length < this.minTitleLength  ){
             this.props.showError('Title is too short!');
             error = true;
         }
-        else if(this.state.description.length < 5 ){
+        else if(this.state.description.length < this.minDescriptionLength ){
             this.props.showError('Description is too short!');
             error = true;
         }
@@ -108,8 +110,18 @@ class AddPost extends React.Component {
     }
 
     handleAddition(tag) {
-        this.setState(state => ({ tags: [...state.tags, tag] }));
-        console.log(this.state.tags);
+
+        if(this.state.tags.length<this.maxTags)
+        {
+            const tagAlreadyExists = this.state.tags.some(t=>t.text === tag.text);
+
+            if(!tagAlreadyExists)
+            {
+                this.setState(state => ({ tags: [...state.tags, tag] }));
+            }
+            else this.props.showError(`Duplicate tag! "${tag.text}" already added.`);
+        }
+        else this.props.showError(`Too many tags! (Maximum is ${this.maxTags})`);
     }
 
     handleDrag(tag, currPos, newPos) {
@@ -130,39 +142,37 @@ class AddPost extends React.Component {
 
     render() {
         return (
-            <div className="AddPost">
+            <div className="Post container my-2 border rounded">
+                <div className="col-md-12 py-2 blogShort">
+                    <h1>{this.isComment()?('Write new reply'):('Write new post')}</h1>
 
-                <form>
-                    <div>
+                    <form>
                         <img ref={this.photoPreview} id="photoPreview" src="#" alt=""/>
-                    </div>
-                    <div>
-                        <p>Add title:</p>
-                        <textarea id={"title"} value={this.title} placeholder={"Add title"} onChange={this.handleTitleChange}/>
-                    </div>
-                    <div>
-                        <p>Add tags:</p>
-                        <ReactTags tags={this.state.tags}
-                                   suggestions={this.state.suggestions}
-                                   placeholder={"Add some tags"}
-                                   handleDelete={this.handleDelete.bind(this)}
-                                   handleAddition={this.handleAddition.bind(this)}
-                                   handleDrag={this.handleDrag.bind(this)}
-                                   delimiters={delimiters} />
-                    </div>
-                    <div>
-                        <p>Add content:</p>
-                        <textarea id={"description"} value={this.description} placeholder={"Add something interesting"}
+                        <textarea id={"title"} value={this.title} placeholder={"Title"} onChange={this.handleTitleChange}/>
+
+                        {
+                            this.isComment()?(null):
+                            (
+                                <ReactTags tags={this.state.tags}
+                                           suggestions={this.state.suggestions}
+                                           placeholder={"Add some tags"}
+                                           handleDelete={this.handleDelete.bind(this)}
+                                           handleAddition={this.handleAddition.bind(this)}
+                                           handleDrag={this.handleDrag.bind(this)}
+                                           delimiters={delimiters}
+                                           allowUnique={false}
+                                            id="tags"/>
+                            )
+                        }
+
+                        <textarea id={"description"} value={this.description} placeholder={"Write something"}
                                   onChange={this.handleDescriptionChange}/>
-                    </div>
-                    <div>
+
                         <input ref={this.fileInput} id="fileInput" accept="image/*" type="file" name="file"
                                onChange={this.fileInputChangeHandler}/>
                         <button id="addPostButton" onClick={this.addPost}>Submit</button>
-                    </div>
-                </form>
-
-
+                    </form>
+                </div>
             </div>
         );
     }

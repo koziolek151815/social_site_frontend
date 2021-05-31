@@ -2,8 +2,7 @@ import ScrollablePostView from "../ScrollablePostView/ScrollablePostView";
 
 function MainPage() {
     return (
-        <div className="App">
-            <h2> Posts </h2>
+        <div className="MainPage">
             <ScrollablePostView endpoint="posts/getFrontPage" sort="id,DESC"></ScrollablePostView>
         </div>
     );
