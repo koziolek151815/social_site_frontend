@@ -6,29 +6,48 @@ import 'bootstrap/dist/js/bootstrap.min.js';
 
 import {formatDate} from "../../Utility/Date";
 import ExpandableImage from "../Images/ExpandableImage";
+import axios from "axios";
+import React from "react";
 
-function Comment(props) {
+class Comment extends React.Component {
+    state = {
+        imageData: null
+    }
 
-    return (
+
+    componentDidMount() {
+        if(this.props.comment.postPhotoName != null) {
+            axios.get(process.env.REACT_APP_BACKEND_URL + '/posts/getPhoto?postId=' + this.props.comment.postId,
+                {headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}})
+                .then((response) => {
+                    this.setState({
+                        imageData: response.data
+                    });
+                })
+        }
+    }
+    render() {
+        return (
             <div className="Post container my-2 border rounded">
                 <div className="col-md-12 py-2 blogShort">
-                    <h1>{props.comment.title}</h1>
-                    <span className="float-left"> Author: {props.comment.postAuthor.username}</span>
-                    <span className="float-right">{formatDate(props.comment.postCreatedDate)}</span><br/>
+                    <h1>{this.props.comment.title}</h1>
+                    <span className="float-left"> Author: {this.props.comment.postAuthor.username}</span>
+                    <span className="float-right">{formatDate(this.props.comment.postCreatedDate)}</span><br/>
 
                     {
-                        props.comment.postPhotoName!=null ?
-                            <ExpandableImage endpoint = {process.env.REACT_APP_BACKEND_URL + '/posts/getPhoto?postId=' + props.comment.postId}></ExpandableImage>:
+                        this.state.imageData != null ?
+                            <ExpandableImage imageData={this.state.imageData}/> :
                             null
                     }
 
                     <article><p>
-                        {props.comment.description}
+                        {this.props.comment.description}
                     </p></article>
-                    <Vote postRating={props.comment.rating} postId={props.comment.postId} />
+                    <Vote postRating={this.props.comment.rating} postId={this.props.comment.postId}/>
                 </div>
             </div>
-    );
+        );
+    }
 }
 
 export default Comment;

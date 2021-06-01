@@ -42,7 +42,7 @@ class Post extends React.Component{
 
                     {
                         this.state.imageData != null ?
-                            <ExpandableImage imageData={this.state.imageData}></ExpandableImage> :
+                            <ExpandableImage imageData={this.state.imageData}/> :
                             null
                     }
 

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import './ExpandableImage.css';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
