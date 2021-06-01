@@ -13,6 +13,7 @@ import PrivateRoute from "./Components/PrivateRoute";
 import AddPost from "./Components/AddPost/AddPost";
 import PostPage from "./Components/PostPage/PostPage";
 import TagPage from "./Components/TagPage/TagPage";
+import SearchPage from "./Components/SearchPage/SearchPage";
 
 function App() {
   const [title, updateTitle] = useState(null);
@@ -40,6 +41,9 @@ function App() {
               </PrivateRoute>
               <PrivateRoute path="/tags/:tagName">
                 <TagPage showError={updateErrorMessage} />
+              </PrivateRoute>
+              <PrivateRoute path="/search/:searchText">
+                <SearchPage showError={updateErrorMessage} />
               </PrivateRoute>
               <PrivateRoute exact path="/home" component={MainPage} />
             </Switch>
