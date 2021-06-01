@@ -3,13 +3,3 @@
 }
 
 .blogShort{ border-bottom:1px solid #ddd;}
-
-.postImageSmall{
-    max-height: 200px;
-    max-width: 200px;
-}
-
-.postImageBig{
-    max-height: 400px;
-    max-width: 100%;
-}

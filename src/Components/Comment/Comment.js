@@ -1,6 +1,3 @@
-import React, {useEffect, useState} from "react";
-import axios, * as others from 'axios';
-import {Link} from "react-router-dom";
 import './Comment.css';
 import Vote from "../Vote/Vote";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -8,44 +5,49 @@ import 'bootstrap/dist/js/bootstrap.min.js';
 
 
 import {formatDate} from "../../Utility/Date";
+import ExpandableImage from "../Images/ExpandableImage";
+import axios from "axios";
+import React from "react";
 
-function Comment(props) {
-    const token = localStorage.getItem('token');
-    useEffect(async () => {
+class Comment extends React.Component {
+    state = {
+        imageData: null
+    }
 
-        const imageHolder = document.getElementById("imageHolder" + props.comment.postId);
 
-        if(props.comment.postPhotoName!=null) {
-            const response = await axios.get(
-                process.env.REACT_APP_BACKEND_URL + '/posts/getPhoto?postId=' + props.comment.postId, {headers: {"Authorization": `Bearer ${token}`}}
-            );
-
-            imageHolder.innerHTML = `<img id=\"image${props.comment.postId}\" alt=\"post img\" src=\"data:image/jpeg;base64,${response.data}\" className=\"align-content-center img-fluid thumb margin10 img-thumbnail\"/>`
-
+    componentDidMount() {
+        if(this.props.comment.postPhotoName != null) {
+            axios.get(process.env.REACT_APP_BACKEND_URL + '/posts/getPhoto?postId=' + this.props.comment.postId,
+                {headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}})
+                .then((response) => {
+                    this.setState({
+                        imageData: response.data
+                    });
+                })
         }
-        else
-        {
-            imageHolder.innerText = ""
-        }
-    }, []);
-
-
-
-    return (
+    }
+    render() {
+        return (
             <div className="Post container my-2 border rounded">
                 <div className="col-md-12 py-2 blogShort">
-                    <h1>{props.comment.title}</h1>
-                    <span className="float-left"> Author: {props.comment.postAuthor.username}</span>
-                    <span className="float-right">{formatDate(props.comment.postCreatedDate)}</span><br/>
+                    <h1>{this.props.comment.title}</h1>
+                    <span className="float-left"> Author: {this.props.comment.postAuthor.username}</span>
+                    <span className="float-right">{formatDate(this.props.comment.postCreatedDate)}</span><br/>
 
-                    <div id = {"imageHolder" + props.comment.postId}></div>
+                    {
+                        this.state.imageData != null ?
+                            <ExpandableImage imageData={this.state.imageData}/> :
+                            null
+                    }
+
                     <article><p>
-                        {props.comment.description}
+                        {this.props.comment.description}
                     </p></article>
-                    <Vote postRating={props.comment.rating} postId={props.comment.postId} />
+                    <Vote postRating={this.props.comment.rating} postId={this.props.comment.postId}/>
                 </div>
             </div>
-    );
+        );
+    }
 }
 
 export default Comment;
