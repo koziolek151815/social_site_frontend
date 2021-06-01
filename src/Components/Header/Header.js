@@ -1,6 +1,7 @@
 import React from 'react';
 import { withRouter } from "react-router-dom";
 import { Navbar, Nav, Form, Button, FormControl } from 'react-bootstrap';
+import {isLoggedIn} from "../../Utility/Authorization";
 
 function Header() {
 
@@ -17,17 +18,27 @@ function Header() {
 
     return(
     <Navbar bg="dark" variant="dark">
-        <Navbar.Brand>Kris welcomes you!</Navbar.Brand>
+        <Navbar.Brand href="/home"><img src= {process.env.PUBLIC_URL +"/logo32.png"} alt="Our logo!"></img> U Krzysia!</Navbar.Brand>
         <Nav className="mr-auto">
-            <Nav.Link href="/home">Home</Nav.Link>
-            <Nav.Link href="/addPost" >AddPost</Nav.Link>
-            <Nav.Link href="/login" onClick={logout}>Logout</Nav.Link>
+            {
+                isLoggedIn()?
+                    (<>
+                        <Nav.Link href="/home">Home</Nav.Link>
+                        <Nav.Link href="/addPost" >New Post</Nav.Link>
+                        <Nav.Link href="/login" onClick={logout}>Logout</Nav.Link>
+                    </>):null
+            }
 
         </Nav>
-        <Form inline>
-            <FormControl ref={(ref) => {searchTextRef = ref}} type="text" placeholder="Search" className="mr-sm-2" />
-            <Button onClick={search} variant="outline-info">Search</Button>
-        </Form>
+        {
+            isLoggedIn()?
+            (<>
+                <Form inline>
+                    <FormControl ref={(ref) => {searchTextRef = ref}} type="text" placeholder="Search" />
+                    <Button onClick={search} variant="outline-info">Search</Button>
+                </Form>
+            </>):null
+        }
     </Navbar>
     )
 }

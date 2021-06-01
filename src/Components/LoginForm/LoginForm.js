@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-import './LoginForm.css';
 import jwt from 'jwt-decode'
 import { withRouter } from "react-router-dom";
 
@@ -56,7 +55,7 @@ function LoginForm(props) {
         props.updateTitle('Register');
     }
     return(
-        <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
+        <div className="card mt-3 p-3">
             <form>
                 <div className="form-group text-left">
                     <label htmlFor="exampleInputEmail1">Email address</label>
