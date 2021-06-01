@@ -13,7 +13,9 @@ class ScrollablePostView extends React.Component {
 
     constructor(props) {
         super(props);
+    }
 
+    componentDidMount() {
         this.fetchMoreData();
     }
 
@@ -25,9 +27,7 @@ class ScrollablePostView extends React.Component {
     }
 
     fetchMoreData = () => {
-        console.log("Trying to get more data!");
         this.getDataFromApi(this.state.currentPage).then((result)=>{
-            console.log(result)
             this.setState({
                 hasMore: !result.data.empty,
                 items: this.state.items.concat(result.data.content),
@@ -40,6 +40,7 @@ class ScrollablePostView extends React.Component {
         return (
             <div>
                 <InfiniteScroll
+                    scrollThreshold={0.01}
                     dataLength={this.state.items.length}
                     next={this.fetchMoreData}
                     hasMore={this.state.hasMore}

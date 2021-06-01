@@ -8,28 +8,9 @@ import 'bootstrap/dist/js/bootstrap.min.js';
 
 
 import {formatDate} from "../../Utility/Date";
+import ExpandableImage from "../Image/ExpandableImage";
 
 function Comment(props) {
-    const token = localStorage.getItem('token');
-    useEffect(async () => {
-
-        const imageHolder = document.getElementById("imageHolder" + props.comment.postId);
-
-        if(props.comment.postPhotoName!=null) {
-            const response = await axios.get(
-                process.env.REACT_APP_BACKEND_URL + '/posts/getPhoto?postId=' + props.comment.postId, {headers: {"Authorization": `Bearer ${token}`}}
-            );
-
-            imageHolder.innerHTML = `<img id=\"image${props.comment.postId}\" alt=\"post img\" src=\"data:image/jpeg;base64,${response.data}\" className=\"align-content-center img-fluid thumb margin10 img-thumbnail\"/>`
-
-        }
-        else
-        {
-            imageHolder.innerText = ""
-        }
-    }, []);
-
-
 
     return (
             <div className="Post container my-2 border rounded">
@@ -38,7 +19,12 @@ function Comment(props) {
                     <span className="float-left"> Author: {props.comment.postAuthor.username}</span>
                     <span className="float-right">{formatDate(props.comment.postCreatedDate)}</span><br/>
 
-                    <div id = {"imageHolder" + props.comment.postId}></div>
+                    {
+                        props.comment.postPhotoName!=null ?
+                            <ExpandableImage endpoint = {process.env.REACT_APP_BACKEND_URL + '/posts/getPhoto?postId=' + props.comment.postId}></ExpandableImage>:
+                            null
+                    }
+
                     <article><p>
                         {props.comment.description}
                     </p></article>

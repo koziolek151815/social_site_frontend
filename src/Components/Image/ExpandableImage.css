@@ -1,0 +1,9 @@
+.expandableImageSmall{
+    max-height: 128px;
+    max-width: 128px;
+}
+
+.expandableImageBig{
+    max-height: 400px;
+    max-width: 100%;
+}
