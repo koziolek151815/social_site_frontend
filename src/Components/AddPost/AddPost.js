@@ -97,10 +97,21 @@ class AddPost extends React.Component {
 
     fileInputChangeHandler = (event) => {
         const [file] = this.fileInput.current.files
-        if (file) {
-            this.setState(state => ({selectedFile: event.target.files[0]}))
-            this.photoPreview.current.src = URL.createObjectURL(file)
+
+        if (file === null) {
+            return;
         }
+        console.log(process.env.REACT_APP_MAX_FILE_SIZE);
+        console.log(event.target.files[0].size);
+        if(event.target.files[0].size > process.env.REACT_APP_MAX_FILE_SIZE) {
+            this.props.showError('File size is too big!');
+            this.photoPreview.current.src = null;
+            this.setState(state => ({selectedFile: null}))
+            return;
+        }
+        this.setState(state => ({selectedFile: event.target.files[0]}))
+        this.photoPreview.current.src = URL.createObjectURL(file)
+
     };
 
     handleDelete(i) {
@@ -175,6 +186,7 @@ class AddPost extends React.Component {
                         </span>
 
                         <button className={"btn btn-default text-white bg-dark float-right"} id="addPostButton" onClick={this.addPost}>Submit</button>
+                        <small id="fileSizeInfo" className="form-text text-muted">Maximum file size is {((process.env.REACT_APP_MAX_FILE_SIZE)/1000000) + 'MB.'}.</small>
                     </form>
                 </div>
             </div>
