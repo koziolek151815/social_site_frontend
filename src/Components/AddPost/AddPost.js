@@ -7,9 +7,10 @@ import { WithContext as ReactTags } from 'react-tag-input';
 const KeyCodes = {
     comma: 188,
     enter: 13,
+    space: 32
 };
 
-const delimiters = [KeyCodes.comma, KeyCodes.enter];
+const delimiters = [KeyCodes.comma, KeyCodes.enter, KeyCodes.space];
 
 class AddPost extends React.Component {
     state = {
@@ -95,10 +96,9 @@ class AddPost extends React.Component {
 
 
     fileInputChangeHandler = (event) => {
-        this.setState(state => ({selectedFile: event.target.files[0]}))
-
         const [file] = this.fileInput.current.files
         if (file) {
+            this.setState(state => ({selectedFile: event.target.files[0]}))
             this.photoPreview.current.src = URL.createObjectURL(file)
         }
     };
@@ -146,7 +146,7 @@ class AddPost extends React.Component {
                 <div className="col-md-12 py-2 blogShort">
                     <h1>{this.isComment()?('Write new reply'):('Write new post')}</h1>
 
-                    <form>
+                    <form autocomplete="off">
                         <img ref={this.photoPreview} id="photoPreview" src="#" alt=""/>
                         <textarea id={"title"} value={this.title} placeholder={"Title"} onChange={this.handleTitleChange}/>
 
@@ -168,9 +168,13 @@ class AddPost extends React.Component {
                         <textarea id={"description"} value={this.description} placeholder={"Write something"}
                                   onChange={this.handleDescriptionChange}/>
 
-                        <input ref={this.fileInput} id="fileInput" accept="image/*" type="file" name="file"
-                               onChange={this.fileInputChangeHandler}/>
-                        <button id="addPostButton" onClick={this.addPost}>Submit</button>
+                        <span className="custom-file w-50 ">
+                            <input className="custom-file-input" ref={this.fileInput} id="fileInput" accept="image/*" type="file" name="file"
+                                   onChange={this.fileInputChangeHandler}/>
+                            <label className="custom-file-label"  htmlFor="customFile">{this.state.selectedFile!==null?(this.state.selectedFile.name):("Choose file")}</label>
+                        </span>
+
+                        <button className={"btn btn-default text-white bg-dark float-right"} id="addPostButton" onClick={this.addPost}>Submit</button>
                     </form>
                 </div>
             </div>

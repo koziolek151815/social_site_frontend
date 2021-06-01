@@ -52,7 +52,7 @@ class Post extends React.Component{
                     <Vote postRating={this.props.post.rating} postId={this.props.post.postId}/>
                     {
                         this.props.showLink ?
-                            (<a className="btn btn-default float-right bg-info"
+                            (<a className="btn btn-default float-right text-white bg-dark"
                                 href={`/posts/${this.props.post.postId}`}>Reply</a>) :
                             null
                     }

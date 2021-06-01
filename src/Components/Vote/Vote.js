@@ -24,15 +24,15 @@ class Vote extends React.Component {
             switch (response.data) {
                 default:
                 case 0:
-                    downvoteButton.className = upvoteButton.className = "btn btn-default bg-info";
+                    downvoteButton.className = upvoteButton.className = "btn btn-default bg-white border border-dark";
                     break;
                 case 1:
-                    downvoteButton.className = "btn btn-default bg-info";
-                    upvoteButton.className = "btn btn-default bg-success";
+                    downvoteButton.className = "btn btn-default bg-white border border-dark";
+                    upvoteButton.className = "btn btn-default bg-success border border-dark";
                     break;
                 case -1:
-                    downvoteButton.className = "btn btn-default bg-danger";
-                    upvoteButton.className = "btn btn-default bg-info";
+                    downvoteButton.className = "btn btn-default bg-danger border border-dark";
+                    upvoteButton.className = "btn btn-default bg-white border border-dark";
                     break;
             }
         });
@@ -84,8 +84,8 @@ class Vote extends React.Component {
         return (
             <span className="Voting">
             <span className="mx-3" ref={this.ratingRef}>{this.props.postRating}</span>
-            <button type="button" ref={this.upvoteButtonRef} onClick={this.upvoteClicked}>➕</button>
-            <button type="button" ref={this.downvoteButtonRef} onClick={this.downvoteClicked}>➖</button>
+            <button type="button" className={"btn btn-default bg-white border border-dark"} ref={this.upvoteButtonRef} onClick={this.upvoteClicked}>➕</button>
+            <button type="button" className={"btn btn-default bg-white border border-dark"} ref={this.downvoteButtonRef} onClick={this.downvoteClicked}>➖</button>
         </span>
         );
     }

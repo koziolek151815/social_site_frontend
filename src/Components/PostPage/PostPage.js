@@ -53,7 +53,7 @@ class PostPage extends React.Component {
                                 <AddPost parentPostId={this.props.match.params.id} showError={this.props.showError}
                                          showLink={false}/>
                         ) :
-                        (<button className="btn btn-default bg-info" onClick={() => {
+                        (<button className="btn btn-default text-white bg-dark" onClick={() => {
                             this.setState({replyVisible: true});
                         }}>Write new reply</button>)
                 }
