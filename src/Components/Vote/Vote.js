@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from "react";
-import axios, * as others from 'axios';
-import {Link} from "react-router-dom";
+import React from "react";
+import axios from 'axios';
 import './Vote.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
@@ -9,13 +8,14 @@ function Vote(props) {
     const token = localStorage.getItem('token');
 
     const syncVote = async () => {
-        const voteResponse = axios.get(
+        axios.get(
             process.env.REACT_APP_BACKEND_URL + '/posts/getCurrentUserVote?postId=' +props.postId, { headers: {"Authorization" : `Bearer ${token}`} }
         ).then((response) => {
             const upvoteButton = document.getElementById("upvoteButton" + props.postId);
             const downvoteButton = document.getElementById("downvoteButton" + props.postId);
 
             switch (response.data) {
+                default:
                 case 0:
                     downvoteButton.className = upvoteButton.className = "btn btn-default bg-info";
                     break;

@@ -39,7 +39,6 @@ function RegistrationForm(props) {
                             ...prevState,
                             'successMessage' : 'Registration successful. You can go to login page'
                         }))
-                        //redirectToHome();
                         props.showError(null);
                     }
 
@@ -61,10 +60,6 @@ function RegistrationForm(props) {
             props.showError('Please enter not null username, email and password')
         }
 
-    }
-    const redirectToHome = () => {
-        props.updateTitle('Home')
-        props.history.push('/home');
     }
     const redirectToLogin = () => {
         props.updateTitle('Login')

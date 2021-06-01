@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import axios, * as others from 'axios';
+import axios from 'axios';
 import './ExpandableImage.css';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -18,10 +18,13 @@ function ExpandableImage(props) {
     }
 
 
-    useEffect(async () => {
-        const response = await axios.get(props.endpoint, {headers: {"Authorization": `Bearer ${token}`}});
-        setImageData(response.data);
-    }, []);
+    useEffect(()=> {
+                async function fetchData()  {
+                    const response = await axios.get(props.endpoint, {headers: {"Authorization": `Bearer ${token}`}});
+                    setImageData(response.data);
+                }
+                fetchData();
+    });
 
 
 

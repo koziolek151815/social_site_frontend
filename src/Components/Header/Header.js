@@ -3,15 +3,11 @@ import { withRouter } from "react-router-dom";
 import { Navbar, Nav, Form, Button, FormControl } from 'react-bootstrap';
 
 function Header(props) {
-    const capitalize = (s) => {
-        if (typeof s !== 'string') return ''
-        return s.charAt(0).toUpperCase() + s.slice(1)
-    }
+
     const logout = () => {
         localStorage.clear();
         window.location.href = '/login';
     }
-    const title = capitalize(props.location.pathname.substring(1,props.location.pathname.length))
 
     return(
         /*<nav className="navbar navbar-dark bg-primary">

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import axios from "axios";
 import Post from "../Post/Post";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -10,10 +10,6 @@ class ScrollablePostView extends React.Component {
         hasMore: true,
         currentPage: 0
     };
-
-    constructor(props) {
-        super(props);
-    }
 
     componentDidMount() {
         this.fetchMoreData();

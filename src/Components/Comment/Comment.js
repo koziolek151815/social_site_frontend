@@ -1,6 +1,3 @@
-import React, {useEffect, useState} from "react";
-import axios, * as others from 'axios';
-import {Link} from "react-router-dom";
 import './Comment.css';
 import Vote from "../Vote/Vote";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -8,7 +5,7 @@ import 'bootstrap/dist/js/bootstrap.min.js';
 
 
 import {formatDate} from "../../Utility/Date";
-import ExpandableImage from "../Image/ExpandableImage";
+import ExpandableImage from "../Images/ExpandableImage";
 
 function Comment(props) {
 

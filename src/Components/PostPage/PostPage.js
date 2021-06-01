@@ -1,6 +1,6 @@
 
 import React, {useEffect, useState} from "react";
-import axios, * as others from 'axios';
+import axios from 'axios';
 import Comment from "../Comment/Comment";
 import AddPost from "../AddPost/AddPost";
 import { withRouter } from "react-router";
@@ -14,16 +14,21 @@ function PostPage(props) {
     const [replyVisible, setReplyVisible] = useState(false);
 
     const token = localStorage.getItem('token');
-    useEffect(async () => {
-        const response = await axios.get(
-            process.env.REACT_APP_BACKEND_URL + '/posts/getById?postId=' +props.match.params.id, { headers: {"Authorization" : `Bearer ${token}`} }
-        );
-        const responseComments = await axios.get(
-            process.env.REACT_APP_BACKEND_URL + '/posts/getPostReplies?postId=' +props.match.params.id + "&sort=postCreatedDate,ASC", { headers: {"Authorization" : `Bearer ${token}`} }
-        );
-        setPost(response.data);
-        setComments(responseComments.data.content);
-    }, []);
+    useEffect(() => {
+        async function fetchData() {
+            const response = await axios.get(
+                process.env.REACT_APP_BACKEND_URL + '/posts/getById?postId=' + props.match.params.id, {headers: {"Authorization": `Bearer ${token}`}}
+            );
+            setPost(response.data);
+
+            const responseComments = await axios.get(
+                process.env.REACT_APP_BACKEND_URL + '/posts/getPostReplies?postId=' + props.match.params.id + "&sort=postCreatedDate,ASC", {headers: {"Authorization": `Bearer ${token}`}}
+            );
+
+            setComments(responseComments.data.content);
+        }
+        fetchData();
+    });
 
 
 
