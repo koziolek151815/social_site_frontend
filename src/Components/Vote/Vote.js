@@ -4,15 +4,22 @@ import './Vote.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 
-function Vote(props) {
-    const token = localStorage.getItem('token');
+class Vote extends React.Component {
 
-    const syncVote = async () => {
+    constructor(props) {
+        super(props);
+        this.token = localStorage.getItem('token');
+        this.ratingRef = React.createRef();
+        this.downvoteButtonRef = React.createRef();
+        this.upvoteButtonRef = React.createRef();
+    }
+
+    syncVote = async () => {
         axios.get(
-            process.env.REACT_APP_BACKEND_URL + '/posts/getCurrentUserVote?postId=' +props.postId, { headers: {"Authorization" : `Bearer ${token}`} }
+            process.env.REACT_APP_BACKEND_URL + '/posts/getCurrentUserVote?postId=' +this.props.postId, { headers: {"Authorization" : `Bearer ${this.token}`} }
         ).then((response) => {
-            const upvoteButton = document.getElementById("upvoteButton" + props.postId);
-            const downvoteButton = document.getElementById("downvoteButton" + props.postId);
+            const upvoteButton = this.upvoteButtonRef.current;
+            const downvoteButton = this.downvoteButtonRef.current;
 
             switch (response.data) {
                 default:
@@ -31,12 +38,11 @@ function Vote(props) {
         });
     }
 
-    const syncRating = ()=> {
+    syncRating = ()=> {
         axios.get(
-            process.env.REACT_APP_BACKEND_URL + '/posts/getById?postId=' +props.postId, { headers: {"Authorization" : `Bearer ${token}`} }
+            process.env.REACT_APP_BACKEND_URL + '/posts/getById?postId=' +this.props.postId, { headers: {"Authorization" : `Bearer ${this.token}`} }
         ).then((response) => {
-            console.log(response);
-            document.getElementById("rating" + props.postId).innerText = response.data.rating;
+            this.ratingRef.current.innerText = response.data.rating;
         })
         .catch((error) => {
             console.log(error);
@@ -45,19 +51,18 @@ function Vote(props) {
 
     }
 
-    //useEffect(syncVote, []);
-    syncVote();
+    componentDidMount() {
+        this.syncVote()
+    }
 
-    const sendVote = (vote) => {
+    sendVote = (vote) => {
         const data = {"vote": vote}
 
-        axios.post(process.env.REACT_APP_BACKEND_URL + '/posts/vote?postId=' +props.postId, data,
-            { headers: {"Authorization" : `Bearer ${token}`} })
+        axios.post(process.env.REACT_APP_BACKEND_URL + '/posts/vote?postId=' +this.props.postId, data,
+            { headers: {"Authorization" : `Bearer ${this.token}`} })
             .then((response) => {
-                console.log(response);
-
-                syncRating();
-                syncVote();
+                this.syncRating();
+                this.syncVote();
             })
             .catch((error) => {
                 console.log(error);
@@ -65,24 +70,25 @@ function Vote(props) {
             });
     }
 
-    const upvoteClicked = (event) => {
+    upvoteClicked = (event) => {
         event.preventDefault();
-        sendVote(true);
+        this.sendVote(true);
     };
 
-    const downvoteClicked = (event) => {
+    downvoteClicked = (event) => {
         event.preventDefault();
-        sendVote(false);
+        this.sendVote(false);
     };
 
-
-    return (
-        <span className="Voting">
-            <span className="mx-3" id={"rating" + props.postId}>{props.postRating}</span>
-            <button type="button" id={"upvoteButton" + props.postId} onClick={upvoteClicked}>➕</button>
-            <button type="button" id={"downvoteButton" + props.postId} onClick={downvoteClicked}>➖</button>
+    render() {
+        return (
+            <span className="Voting">
+            <span className="mx-3" ref={this.ratingRef}>{this.props.postRating}</span>
+            <button type="button" ref={this.upvoteButtonRef} onClick={this.upvoteClicked}>➕</button>
+            <button type="button" ref={this.downvoteButtonRef} onClick={this.downvoteClicked}>➖</button>
         </span>
-    );
+        );
+    }
 }
 
 export default Vote;
