@@ -12,7 +12,8 @@ function Header() {
         window.location.href = '/login';
     }
 
-    const search = () => {
+    const search = (event) => {
+        event.preventDefault();
         window.location.href = '/search/' + searchTextRef.value;
     }
 
@@ -33,7 +34,7 @@ function Header() {
         {
             isLoggedIn()?
             (<>
-                <Form inline>
+                <Form inline onSubmit={search}>
                     <FormControl ref={(ref) => {searchTextRef = ref}} type="text" placeholder="Search" />
                     <Button onClick={search} variant="outline-info">Search</Button>
                 </Form>
