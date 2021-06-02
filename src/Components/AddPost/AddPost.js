@@ -26,6 +26,7 @@ class AddPost extends React.Component {
 
         this.fileInput = React.createRef();
         this.photoPreview = React.createRef();
+        this.submitButtonRef = React.createRef();
         this.token = localStorage.getItem('token');
 
         this.maxTags = 10;
@@ -58,7 +59,8 @@ class AddPost extends React.Component {
         else
             link = process.env.REACT_APP_BACKEND_URL + '/posts';
 
-
+        //Disable button not to send multiple posts
+        this.submitButtonRef.current.disabled = true;
 
         axios.post(link, formData,
             { headers: {"Authorization" : `Bearer ${this.token}`} })
@@ -67,9 +69,9 @@ class AddPost extends React.Component {
                     window.location.replace('/posts/' + this.props.parentPostId);
                 else
                     window.location.replace('/posts/' + response.data.postId);
-                console.log(response);
             })
             .catch((error) => {
+                this.submitButtonRef.current.disabled = false;
                 console.log(error);
                 alert("File Upload Error");
             });
@@ -185,7 +187,7 @@ class AddPost extends React.Component {
                             <label className="custom-file-label"  htmlFor="customFile">{this.state.selectedFile!==null?(this.state.selectedFile.name):("Choose file")}</label>
                         </span>
 
-                        <button className={"btn btn-default text-white bg-dark float-right"} id="addPostButton" onClick={this.addPost}>Submit</button>
+                        <button ref={this.submitButtonRef} className={"btn btn-default text-white bg-dark float-right"} id="addPostButton" onClick={this.addPost}>Submit</button>
                         <small id="fileSizeInfo" className="form-text text-muted">Maximum file size is {((process.env.REACT_APP_MAX_FILE_SIZE)/1000000) + 'MB.'}.</small>
                     </form>
                 </div>
