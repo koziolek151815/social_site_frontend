@@ -7,6 +7,7 @@ import 'bootstrap/dist/js/bootstrap.min.js';
 import {formatDate} from "../../Utility/Date";
 import ExpandableImage from "../Images/ExpandableImage";
 import axios from "axios";
+import {getCachedImageData} from "../../Utility/Cache";
 
 class Post extends React.Component{
     state = {
@@ -16,11 +17,10 @@ class Post extends React.Component{
 
     componentDidMount() {
         if(this.props.post.postPhotoName != null) {
-            axios.get(process.env.REACT_APP_BACKEND_URL + '/posts/getPhoto?postId=' + this.props.post.postId,
-                {headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}})
-                .then((response) => {
+            getCachedImageData(this.props.post.postId)
+                .then((imageData) => {
                     this.setState({
-                        imageData: response.data
+                        imageData: imageData
                     });
                 })
         }
