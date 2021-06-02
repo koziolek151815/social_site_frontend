@@ -8,6 +8,7 @@ import {formatDate} from "../../Utility/Date";
 import ExpandableImage from "../Images/ExpandableImage";
 import axios from "axios";
 import React from "react";
+import {getCachedImageData} from "../../Utility/Cache";
 
 class Comment extends React.Component {
     state = {
@@ -17,11 +18,10 @@ class Comment extends React.Component {
 
     componentDidMount() {
         if(this.props.comment.postPhotoName != null) {
-            axios.get(process.env.REACT_APP_BACKEND_URL + '/posts/getPhoto?postId=' + this.props.comment.postId,
-                {headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}})
-                .then((response) => {
+            getCachedImageData(this.props.comment.postId)
+                .then((imageData) => {
                     this.setState({
-                        imageData: response.data
+                        imageData: imageData
                     });
                 })
         }
