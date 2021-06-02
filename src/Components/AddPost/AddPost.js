@@ -100,12 +100,10 @@ class AddPost extends React.Component {
     fileInputChangeHandler = (event) => {
         const [file] = this.fileInput.current.files
 
-        if (file === null) {
+        if (file === null && file.length > 0) {
             return;
         }
-        console.log(process.env.REACT_APP_MAX_FILE_SIZE);
-        console.log(event.target.files[0].size);
-        if(event.target.files[0].size > process.env.REACT_APP_MAX_FILE_SIZE) {
+        if(file[0] > process.env.REACT_APP_MAX_FILE_SIZE) {
             this.props.showError('File size is too big!');
             this.photoPreview.current.src = null;
             this.setState(state => ({selectedFile: null}))
