@@ -8,18 +8,30 @@ class ScrollablePostView extends React.Component {
     state = {
         items: [],
         hasMore: true,
-        currentPage: 0
+        currentPage: 0,
     };
+
 
     componentDidMount() {
         this.fetchMoreData();
     }
 
     getDataFromApi = async (page)=>{
-        return await axios.get(
-            process.env.REACT_APP_BACKEND_URL + `/${this.props.endpoint}?page=${page}&size=5&sort=${this.props.sort}`,
-            { headers: {"Authorization" : `Bearer ${localStorage.getItem('token')}`} }
-        );
+
+        if(this.props.endpoint.includes('?'))
+        {
+            return await axios.get(
+                process.env.REACT_APP_BACKEND_URL + `/${this.props.endpoint}&page=${page}&size=5&sort=${this.props.sort}`,
+                { headers: {"Authorization" : `Bearer ${localStorage.getItem('token')}`} }
+            );
+        }
+        else
+        {
+            return await axios.get(
+                process.env.REACT_APP_BACKEND_URL + `/${this.props.endpoint}?page=${page}&size=5&sort=${this.props.sort}`,
+                { headers: {"Authorization" : `Bearer ${localStorage.getItem('token')}`} }
+            );
+        }
     }
 
     fetchMoreData = () => {

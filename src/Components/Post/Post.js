@@ -31,7 +31,7 @@ class Post extends React.Component{
             <div className="Post container my-2 border rounded">
                 <div className="col-md-12 py-2 blogShort">
                     <h1>{this.props.post.title}</h1>
-                    <span className="float-left"> Author: {this.props.post.postAuthor.username}</span>
+                    <span className="float-left"> Author: <a href={'/profile/' + this.props.post.postAuthor.id}>{this.props.post.postAuthor.username}</a></span>
                     <span className="float-right">{formatDate(this.props.post.postCreatedDate)}</span><br/>
                     {
                         this.props.post.tags.length !== 0 ?

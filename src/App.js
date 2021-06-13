@@ -14,6 +14,7 @@ import AddPost from "./Components/AddPost/AddPost";
 import PostPage from "./Components/PostPage/PostPage";
 import TagPage from "./Components/TagPage/TagPage";
 import SearchPage from "./Components/SearchPage/SearchPage";
+import UserProfile from "./Components/UserProfile/UserProfile";
 
 function App() {
   const [title, updateTitle] = useState(null);
@@ -34,9 +35,14 @@ function App() {
                 <LoginForm showError={updateErrorMessage} updateTitle={updateTitle}/>
               </Route>
 
+
               <PrivateRoute path="/addPost" component={<AddPost showError={updateErrorMessage}/>}/>
               <PrivateRoute path="/posts/:id" component={<PostPage showError={updateErrorMessage}/>}/>
+
+              <PrivateRoute path="/profile/:id" component={<UserProfile showError={updateErrorMessage}/>}/>
+
               <PrivateRoute path="/tags/:tagName?" component={<TagPage showError={updateErrorMessage}/>}/>
+
               <PrivateRoute path="/search/:searchText?" component={<SearchPage showError={updateErrorMessage}/>}/>
 
               <PrivateRoute exact path="/home" component={<MainPage/>} />
