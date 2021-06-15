@@ -49,7 +49,7 @@ class UserProfile extends React.Component  {
             case UserProfileViewState.votes:
                 return <>
                         <h2>User votes:</h2>
-                        <ScrollablePostView key="3" endpoint={"profile/user/votes?userId=" + this.props.match.params.id} sort="id,DESC&votes,DESC"/>)
+                        <ScrollablePostView key="3" endpoint={"profile/user/votes?userId=" + this.props.match.params.id} sort="id,DESC&votes,DESC"/>
                     </>
 
         }
