@@ -15,6 +15,7 @@ import PostPage from "./Components/PostPage/PostPage";
 import TagPage from "./Components/TagPage/TagPage";
 import SearchPage from "./Components/SearchPage/SearchPage";
 import UserProfile from "./Components/UserProfile/UserProfile";
+import ChangePassword from "./Components/ChangePassword/ChangePassword";
 
 function App() {
   const [title, updateTitle] = useState(null);
@@ -44,6 +45,8 @@ function App() {
               <PrivateRoute path="/tags/:tagName?" component={<TagPage showError={updateErrorMessage}/>}/>
 
               <PrivateRoute path="/search/:searchText?" component={<SearchPage showError={updateErrorMessage}/>}/>
+
+              <PrivateRoute path="/changePassword" component={<ChangePassword showError={updateErrorMessage}/>}/>
 
               <PrivateRoute exact path="/home" component={<MainPage/>} />
             </Switch>

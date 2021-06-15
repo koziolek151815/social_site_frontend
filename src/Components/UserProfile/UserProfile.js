@@ -65,17 +65,17 @@ class UserProfile extends React.Component  {
             default:
             case UserProfileViewState.posts:
                 return <>
-                        <h2>User posts:</h2>
+                        <h2>User's posts:</h2>
                         <ScrollablePostView key="1" endpoint={"profile/user/posts?userId=" + this.props.match.params.id} sort="id,DESC&votes,DESC"/>
                         </>
             case UserProfileViewState.comments:
                 return <>
-                        <h2>User comments:</h2>
+                        <h2>User's comments:</h2>
                         <ScrollablePostView key="2" endpoint={"profile/user/comments?userId=" + this.props.match.params.id} sort="id,DESC&votes,DESC"/>
                     </>
             case UserProfileViewState.votes:
                 return <>
-                        <h2>User votes:</h2>
+                        <h2>User's votes:</h2>
                         <ScrollablePostView key="3" endpoint={"profile/user/votes?userId=" + this.props.match.params.id} sort="id,DESC&votes,DESC"/>
                     </>
 
@@ -112,6 +112,8 @@ class UserProfile extends React.Component  {
                         ) :
                         (<h2> {"Loading..."}  </h2>)
                 }
+
+                <hr className="mt-3 mb-3"/>
 
                 <button className="btn btn-default text-white bg-dark"
                    onClick={ (e)=>{e.preventDefault();this.setState({currentlyListing: UserProfileViewState.posts});}}
