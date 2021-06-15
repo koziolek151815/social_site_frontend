@@ -39,7 +39,7 @@ function App() {
               <PrivateRoute path="/addPost" component={<AddPost showError={updateErrorMessage}/>}/>
               <PrivateRoute path="/posts/:id" component={<PostPage showError={updateErrorMessage}/>}/>
 
-              <PrivateRoute path="/profile/:id" component={<UserProfile showError={updateErrorMessage}/>}/>
+              <PrivateRoute path="/profile/:id?" component={<UserProfile showError={updateErrorMessage}/>}/>
 
               <PrivateRoute path="/tags/:tagName?" component={<TagPage showError={updateErrorMessage}/>}/>
 

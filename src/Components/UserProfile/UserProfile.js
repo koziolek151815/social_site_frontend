@@ -3,6 +3,7 @@ import { withRouter } from "react-router";
 import React from "react";
 import axios from "axios";
 import {formatDate} from "../../Utility/Date";
+import {getCachedCurrentUserInfo} from "../../Utility/Cache";
 
 
 const UserProfileViewState = Object.freeze({"posts":1, "comments":2, "votes":3})
@@ -10,21 +11,47 @@ const UserProfileViewState = Object.freeze({"posts":1, "comments":2, "votes":3})
 class UserProfile extends React.Component  {
     state = {
         profileData: null,
-        currentlyListing: UserProfileViewState.posts
+        currentlyListing: UserProfileViewState.posts,
+        isCurrentUserProfile: false
     };
 
     componentDidMount() {
-        axios.get(process.env.REACT_APP_BACKEND_URL + `/profile/user?userId=${this.props.match.params.id}`,
-            { headers: {"Authorization" : `Bearer ${localStorage.getItem('token')}`} }
-        ).then((response)=>{
 
-            this.setState({
-                profileData: response.data
+        if(typeof this.props.match.params.id !== "undefined")
+        {
+            axios.get(process.env.REACT_APP_BACKEND_URL + `/profile/user?userId=${this.props.match.params.id}`,
+                { headers: {"Authorization" : `Bearer ${localStorage.getItem('token')}`} }
+            ).then((response)=>{
+
+                this.setState({
+                    profileData: response.data
+                });
+
+                getCachedCurrentUserInfo().then(response=>{
+                        console.log(response);
+                        if(response.id === this.state.profileData.id)
+                        {
+                            this.setState({
+                                isCurrentUserProfile: true
+                            });
+                        }
+                    }
+                )
+
+            }).catch(()=>{
+                window.location = "/home";
             });
+        }
+        else
+        {
+            //No id provided go to current user page
+            getCachedCurrentUserInfo().then(response=>{
+                window.location = "/profile/" + response.id;
+            })
+        }
 
-        }).catch(()=>{
-           window.location = "/home";
-        });
+
+
 
     }
 
@@ -32,7 +59,7 @@ class UserProfile extends React.Component  {
 
     userPostList()
     {
-
+        if(typeof this.props.match.params.id === "undefined") return null;
         switch (this.state.currentlyListing)
         {
             default:
@@ -63,10 +90,24 @@ class UserProfile extends React.Component  {
                     this.state.profileData !== null ?
                         (
                             <>
-                                <h2>{this.state.profileData.username}</h2><br/>
-                                Profile created at:{formatDate(this.state.profileData.userCreatedDate)}<br/>
-                                Gender:{this.state.profileData.gender}<br/>
-                                Description:{this.state.profileData.profileDescription}<br/>
+                                {
+                                    this.state.isCurrentUserProfile?
+                                        <>
+                                            <h2>{this.state.profileData.username}'s profile (Your profile)</h2>
+                                            Profile created at:{formatDate(this.state.profileData.userCreatedDate)}<br/>
+                                            Gender:{this.state.profileData.gender}<br/>
+                                            Description:{this.state.profileData.profileDescription}<br/>
+                                            <a className="btn btn-default text-white bg-danger" href={"/changePassword"}>Change your password</a>
+                                        </> :
+                                        <>
+                                            <h2>{this.state.profileData.username}'s profile</h2>
+                                            Profile created at:{formatDate(this.state.profileData.userCreatedDate)}<br/>
+                                            Gender:{this.state.profileData.gender}<br/>
+                                            Description:{this.state.profileData.profileDescription}<br/>
+                                        </>
+                                }<br/>
+
+
                             </>
                         ) :
                         (<h2> {"Loading..."}  </h2>)
