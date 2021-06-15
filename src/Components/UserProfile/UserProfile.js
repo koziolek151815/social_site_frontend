@@ -46,8 +46,15 @@ class UserProfile extends React.Component  {
         {
             //No id provided go to current user page
             getCachedCurrentUserInfo().then(response=>{
-                window.location = "/profile/" + response.id;
+                this.props.match.params.id = response.id;
+                window.history.replaceState(null, '', "/profile/" + response.id);
+                this.setState({
+                    profileData: response,
+                    isCurrentUserProfile: true
+                });
+
             })
+
         }
 
 
@@ -94,11 +101,12 @@ class UserProfile extends React.Component  {
                                     this.state.isCurrentUserProfile?
                                         <>
                                             <h2>{this.state.profileData.username}'s profile (Your profile)</h2>
-                                            Profile created at:{formatDate(this.state.profileData.userCreatedDate)}<br/>
-                                            Gender:{this.state.profileData.gender}<br/>
-                                            Description:{this.state.profileData.profileDescription}<br/>
+                                            Profile created at: {formatDate(this.state.profileData.userCreatedDate)}<br/>
+                                            Gender: {this.state.profileData.gender}<br/>
+                                            Description: {this.state.profileData.profileDescription}<br/>
                                             <a className="btn btn-default text-white bg-danger" href={"/changePassword"}>Change your password</a>
                                             <a className="btn btn-default text-white bg-danger" href={"/deactivateAccount"}>Deactivate your account</a>
+                                            <a className="btn btn-default text-white bg-danger" href={"/editProfile"}>Edit profile</a>
                                         </> :
                                         <>
                                             <h2>{this.state.profileData.username}'s profile</h2>
