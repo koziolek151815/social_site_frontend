@@ -98,6 +98,7 @@ class UserProfile extends React.Component  {
                                             Gender:{this.state.profileData.gender}<br/>
                                             Description:{this.state.profileData.profileDescription}<br/>
                                             <a className="btn btn-default text-white bg-danger" href={"/changePassword"}>Change your password</a>
+                                            <a className="btn btn-default text-white bg-danger" href={"/deactivateAccount"}>Deactivate your account</a>
                                         </> :
                                         <>
                                             <h2>{this.state.profileData.username}'s profile</h2>

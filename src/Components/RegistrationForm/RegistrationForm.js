@@ -103,7 +103,7 @@ function RegistrationForm(props) {
                            value={state.email}
                            onChange={handleChange}
                     />
-                    <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
+                    <small id="emailHelp" className="form-text text-muted">We might share your email with someone else.</small>
                 </div>
                 <div className="form-group text-left">
                     <label htmlFor="exampleInputUsername1">Username</label>
