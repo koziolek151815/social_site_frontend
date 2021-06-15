@@ -18,28 +18,30 @@ function Header() {
     }
 
     return(
-    <Navbar bg="dark" variant="dark">
-        <Navbar.Brand href="/home"><img src= {process.env.PUBLIC_URL +"/logo32.png"} alt="Our logo!"></img> U Krzysia!</Navbar.Brand>
-        <Nav className="mr-auto">
+    <Navbar bg="dark" expand="lg" variant="dark">
+        <Navbar.Brand href="/home"><img src= {process.env.PUBLIC_URL + "/logo32.png"} alt="Our logo!"/> U Krzysia!</Navbar.Brand>
+        {/*<Navbar.Collapse id="responsive-navbar-nav">*/}
             {
                 isLoggedIn()?
-                    (<>
+                    (<Nav className="mr-auto">
                         <Nav.Link href="/home">Home</Nav.Link>
                         <Nav.Link href="/addPost" >New Post</Nav.Link>
                         <Nav.Link href="/login" onClick={logout}>Logout</Nav.Link>
-                    </>):null
+                    </Nav>):null
             }
 
-        </Nav>
-        {
-            isLoggedIn()?
-            (<>
-                <Form inline onSubmit={search}>
-                    <FormControl ref={(ref) => {searchTextRef = ref}} type="text" placeholder="Search" />
-                    <Button onClick={search} variant="outline-info">Search</Button>
-                </Form>
-            </>):null
-        }
+            {
+                isLoggedIn()?
+                (<>
+                    <Nav.Link href="/profile">Your profile</Nav.Link>
+                    <Form inline onSubmit={search}>
+                        <FormControl ref={(ref) => {searchTextRef = ref}} type="text" placeholder="Search" />
+                        <Button onClick={search} variant="outline-info">Search</Button>
+                    </Form>
+                </>):null
+            }
+
+        {/*</Navbar.Collapse>*/}
     </Navbar>
     )
 }

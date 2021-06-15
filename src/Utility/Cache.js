@@ -19,3 +19,18 @@ export async function getCachedImageData(postId) {
     localStorage.setItem(key, responseData);
     return responseData;
 }
+
+export async function getCachedCurrentUserInfo() {
+    const key = "currentUser";
+
+    const fromStorage = localStorage.getItem(key);
+
+    if(fromStorage!==null)return JSON.parse(fromStorage);
+
+    const response = await axios.get(process.env.REACT_APP_BACKEND_URL + '/profile/currentUser',
+        {headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}});
+    const responseData = response.data;
+
+    localStorage.setItem(key, JSON.stringify(responseData));
+    return responseData;
+}
