@@ -52,19 +52,16 @@ function App() {
                                 <PrivateRoute path="/addPost" component={<AddPost showError={updateErrorMessage}/>}/>
                                 <PrivateRoute path="/posts/:id" component={<PostPage showError={updateErrorMessage}/>}/>
 
-                                <PrivateRoute path="/profile/:id?"
-                                              component={<UserProfile showError={updateErrorMessage}/>}/>
+                                <PrivateRoute path="/profile/:id?" component={<UserProfile showError={updateErrorMessage}/>}/>
 
-                                <PrivateRoute path="/tags/:tagName?"
-                                              component={<TagPage showError={updateErrorMessage}/>}/>
 
-                                <PrivateRoute path="/search/:searchText?"
-                                              component={<SearchPage showError={updateErrorMessage}/>}/>
+                                <PrivateRoute path="/tags/:tagName?" component={<TagPage showError={updateErrorMessage}/>}/>
 
-                                <PrivateRoute path="/changePassword"
-                                              component={<ChangePassword showError={updateErrorMessage}/>}/>
-                                <PrivateRoute path="/deactivateAccount"
-                                              component={<DeactivateAccount showError={updateErrorMessage}/>}/>
+                                <PrivateRoute path="/search/:searchText?" component={<SearchPage showError={updateErrorMessage}/>}/>
+
+                                <PrivateRoute path="/editProfile" component={<EditProfile showError={updateErrorMessage}/>}/>
+                                <PrivateRoute path="/changePassword" component={<ChangePassword showError={updateErrorMessage}/>}/>
+                                <PrivateRoute path="/deactivateAccount" component={<DeactivateAccount showError={updateErrorMessage}/>}/>
 
                                 <PrivateRoute exact path="/home" component={<MainPage/>}/>
                             </Switch>

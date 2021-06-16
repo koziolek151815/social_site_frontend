@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import { withRouter } from "react-router-dom";
+import {logout} from "../../Utility/Authorization";
 
 
 function DeactivateAccount(props) {
@@ -35,6 +36,7 @@ function DeactivateAccount(props) {
                         successMessage: 'Your account has been deactivated!'
                     }))
                     props.showError(null);
+                    logout();
                 }
 
             })
