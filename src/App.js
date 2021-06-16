@@ -17,6 +17,7 @@ import SearchPage from "./Components/SearchPage/SearchPage";
 import UserProfile from "./Components/UserProfile/UserProfile";
 import ChangePassword from "./Components/ChangePassword/ChangePassword";
 import DeactivateAccount from "./Components/DeactivateAccount/DeactivateAccount";
+import EditProfile from "./Components/EditProfile/EditProfile";
 import Banner from "./Components/Banners/Banner"
 import VerticalAd from "./Components/Banners/VerticalAd";
 
