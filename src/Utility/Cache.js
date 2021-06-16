@@ -34,3 +34,7 @@ export async function getCachedCurrentUserInfo() {
     localStorage.setItem(key, JSON.stringify(responseData));
     return responseData;
 }
+
+export function resetCurrentUserInfo() {
+    localStorage.removeItem("currentUser");
+}

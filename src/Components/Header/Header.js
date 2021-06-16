@@ -1,16 +1,11 @@
 import React from 'react';
 import { withRouter } from "react-router-dom";
 import { Navbar, Nav, Form, Button, FormControl } from 'react-bootstrap';
-import {isLoggedIn} from "../../Utility/Authorization";
+import {isLoggedIn, logout} from "../../Utility/Authorization";
 
 function Header() {
 
     var searchTextRef = React.createRef();
-
-    const logout = () => {
-        localStorage.clear();
-        window.location.href = '/login';
-    }
 
     const search = (event) => {
         event.preventDefault();

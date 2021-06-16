@@ -17,6 +17,7 @@ import SearchPage from "./Components/SearchPage/SearchPage";
 import UserProfile from "./Components/UserProfile/UserProfile";
 import ChangePassword from "./Components/ChangePassword/ChangePassword";
 import DeactivateAccount from "./Components/DeactivateAccount/DeactivateAccount";
+import EditProfile from "./Components/EditProfile/EditProfile";
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <div className="App" >
           <Header title={title}/>
           <div className="container d-flex flex-column pb-5">
+
             <Switch>
               <Route path="/" exact={true}>
                 <RegistrationForm showError={updateErrorMessage} updateTitle={updateTitle}/>
@@ -38,7 +40,6 @@ function App() {
                 <LoginForm showError={updateErrorMessage} updateTitle={updateTitle}/>
               </Route>
 
-
               <PrivateRoute path="/addPost" component={<AddPost showError={updateErrorMessage}/>}/>
               <PrivateRoute path="/posts/:id" component={<PostPage showError={updateErrorMessage}/>}/>
 
@@ -48,6 +49,7 @@ function App() {
 
               <PrivateRoute path="/search/:searchText?" component={<SearchPage showError={updateErrorMessage}/>}/>
 
+              <PrivateRoute path="/editProfile" component={<EditProfile showError={updateErrorMessage}/>}/>
               <PrivateRoute path="/changePassword" component={<ChangePassword showError={updateErrorMessage}/>}/>
               <PrivateRoute path="/deactivateAccount" component={<DeactivateAccount showError={updateErrorMessage}/>}/>
 
