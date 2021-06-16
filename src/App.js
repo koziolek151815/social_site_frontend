@@ -33,10 +33,10 @@ function App() {
                 <div className="container-fluid d-flex flex-column pb-5">
                     <div className="row">
                         <div className="col">
-                            <VerticalAd imagePath={"http://localhost:3000/banner_left.png"} float={"float-left"}/>
+                            <VerticalAd imagePath={"/banner_left.png"} float={"float-left"}/>
                         </div>
                         <div className="col-8">
-                          <Banner imagePath={"http://localhost:3000/banner_top.png"}/>
+                          <Banner imagePath={"/banner_top.png"}/>
                             <Switch>
                                 <Route path="/" exact={true}>
                                     <RegistrationForm showError={updateErrorMessage} updateTitle={updateTitle}/>
@@ -69,10 +69,10 @@ function App() {
                                 <PrivateRoute exact path="/home" component={<MainPage/>}/>
                             </Switch>
                             <AlertComponent errorMessage={errorMessage} hideError={updateErrorMessage}/>
-                          <Banner imagePath={"http://localhost:3000/banner_bottom.png"}/>
+                          <Banner imagePath={"/banner_bottom.png"}/>
                         </div>
                         <div className="col">
-                            <VerticalAd imagePath={"http://localhost:3000/banner_left.png"} float={"float-right"}/>
+                            <VerticalAd imagePath={"/banner_left.png"} float={"float-right"}/>
                         </div>
 
                     </div>
